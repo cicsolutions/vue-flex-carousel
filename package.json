@@ -3,21 +3,6 @@
   "version": "0.1.0",
   "description": "A touch-friendly, responsive vuejs carousel component leveraging flexbox and vuejs's transition engine to create amazing javascript carousels.",
   "main": "dist/vue-flex-carousel.min.js",
-  "scripts": {
-    "build": "webpack --config config/webpack.min.conf.js && npm run updateDocAssets",
-    "coveralls": "cat coverage/client/lcov.info | ./node_modules/.bin/coveralls ",
-    "dev": "vue-play start --standalone",
-    "dev:build": "vue-play build",
-    "docs:build": "npm run build && rm -rf ./docs/public && mkdir ./docs/public/ && cd ./docs/public/ && git init && git remote add origin git@github.com:wlada/vue-carousel-3d.git && git fetch && git checkout -f gh-pages && cd .. && npm install && ./node_modules/.bin/hexo clean && ./node_modules/.bin/hexo generate",
-    "lint": "eslint \"src/**/?(*.js|*.vue)\" || exit 1",
-    "test": "npm run test:client",
-    "test:client": "jest --config tests/client.jest.json --forceExit",
-    "test:client:coverage": "jest --config tests/client.jest.json --coverage --forceExit",
-    "test-coverage": "npm run test:client:coverage",
-    "updateDocAssets": "cp ./dist/vue-carousel-3d.min.js ./docs/themes/vue/source/js/",
-    "docs:deploy": "cd docs && hexo deploy && cd ..",
-    "deploy": "git push https://github.com/Wlada/vue-carousel-3d master"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cicsolutions/vue-flex-carousel.git"
@@ -35,6 +20,21 @@
     "url": "https://github.com/cicsolutions/vue-flex-carousel/issues"
   },
   "homepage": "https://github.com/cicsolutions/vue-flex-carousel#readme",
+  "scripts": {
+    "build": "webpack --config config/webpack.min.conf.js && npm run updateDocAssets",
+    "coveralls": "cat coverage/client/lcov.info | ./node_modules/.bin/coveralls ",
+    "dev": "vue-play start --standalone",
+    "dev:build": "vue-play build",
+    "docs:build": "npm run build && rm -rf ./docs/public && mkdir ./docs/public/ && cd ./docs/public/ && git init && git remote add origin git@github.com:wlada/vue-carousel-3d.git && git fetch && git checkout -f gh-pages && cd .. && npm install && ./node_modules/.bin/hexo clean && ./node_modules/.bin/hexo generate",
+    "lint": "eslint \"src/**/?(*.js|*.vue)\" || exit 1",
+    "test": "npm run test:client",
+    "test:client": "jest --config tests/client.jest.json --forceExit",
+    "test:client:coverage": "jest --config tests/client.jest.json --coverage --forceExit",
+    "test-coverage": "npm run test:client:coverage",
+    "updateDocAssets": "cp ./dist/vue-carousel-3d.min.js ./docs/themes/vue/source/js/",
+    "docs:deploy": "cd docs && hexo deploy && cd ..",
+    "deploy": "git push https://github.com/Wlada/vue-carousel-3d master"
+  },
   "dependencies": {
     "vue": "^2.5.11"
   },
