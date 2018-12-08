@@ -1,0 +1,26 @@
+{
+  "name": "vue-flex-carousel",
+  "version": "0.1.0",
+  "description": "A touch-friendly, responsive vuejs carousel component leveraging flexbox and vuejs's transition engine to create amazing javascript carousels.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cicsolutions/vue-flex-carousel.git"
+  },
+  "keywords": [
+    "vuejs",
+    "carousel",
+    "flexbox",
+    "touch-friendly",
+    "responsive"
+  ],
+  "author": "caleb.crosby@cicsolutions.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cicsolutions/vue-flex-carousel/issues"
+  },
+  "homepage": "https://github.com/cicsolutions/vue-flex-carousel#readme"
+}
