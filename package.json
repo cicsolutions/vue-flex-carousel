@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/cicsolutions/vue-flex-carousel#readme",
   "scripts": {
-    "build": "webpack --config config/webpack.min.conf.js && npm run updateDocAssets",
+    "build": "webpack --config config/webpack.min.conf.js",
     "coveralls": "cat coverage/client/lcov.info | ./node_modules/.bin/coveralls ",
     "dev": "vue-play start --standalone",
     "dev:build": "vue-play build",
@@ -33,7 +33,7 @@
     "test-coverage": "npm run test:client:coverage",
     "updateDocAssets": "cp ./dist/vue-carousel-3d.min.js ./docs/themes/vue/source/js/",
     "docs:deploy": "cd docs && hexo deploy && cd ..",
-    "deploy": "git push https://github.com/Wlada/vue-carousel-3d master"
+    "deploy": "git push https://github.com/cicsolutions/vue-flex-carousel.git master"
   },
   "dependencies": {
     "vue": "^2.5.17",
