@@ -36,7 +36,8 @@
     "deploy": "git push https://github.com/Wlada/vue-carousel-3d master"
   },
   "dependencies": {
-    "vue": "^2.5.17"
+    "vue": "^2.5.17",
+    "vue-play": "^3.2.1"
   },
   "browserslist": [
     "> 1%",
@@ -72,8 +73,7 @@
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
     "vue-loader": "^15.3.0",
-    "vue-play": "2.2.0",
-    "vue-play-cli": "1.0.4",
+    "vue-play-cli": "^1.1.1",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.5.17",
     "webpack": "^4.16.5",
