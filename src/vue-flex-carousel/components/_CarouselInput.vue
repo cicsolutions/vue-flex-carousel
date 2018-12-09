@@ -1,16 +1,19 @@
 <template>
   <div>
     <h2>Carousel Input</h2>
-    <sandbox-controls></sandbox-controls>
+    <sandbox></sandbox>
   </div>
 </template>
 
 <script>
 import { store } from '../store'
 // import { bus, events } from '../event-bus'
-import SandboxControls from './sandbox/SandboxControls'
+
+import Sandbox from './sandbox/SandboxContainer'
 
 export default {
+  components: { Sandbox },
+
   props: {
 
     // carousel
@@ -169,8 +172,6 @@ export default {
     // responsive
 
   },
-
-  components: { SandboxControls },
 
   data: () => ({ store }),
 }
