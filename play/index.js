@@ -10,7 +10,7 @@ const images = [
   {
     title: 'Lorem ipsum dolor sit amet, consectetur adipisicing.',
     bgColor: '',
-    bgImageUrl: "https://placeimg.com/640/480/nature/1",
+    bgImageUrl: "https://placeimg.com/640/480/nature/3",
     innerHtml: `<div>Hi!  I'm html content!</div>`,
     data: {}
   },
