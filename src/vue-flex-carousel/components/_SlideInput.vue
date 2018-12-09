@@ -3,6 +3,9 @@
 </template>
 
 <script>
+import { store } from '../store'
+// import { bus, events } from '../event-bus'
+
 export default {
 }
 </script>
