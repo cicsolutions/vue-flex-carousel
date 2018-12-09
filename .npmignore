@@ -11,3 +11,4 @@ src/*
 babel.config.js
 play.config.js
 tailwind.js
+yarn.lock
