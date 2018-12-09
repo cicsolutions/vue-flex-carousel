@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Vue Flex Carousel - Coming Soon!</h1>
+    <slot></slot>
   </div>
 </template>
 
@@ -9,5 +9,5 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="css">
 </style>
