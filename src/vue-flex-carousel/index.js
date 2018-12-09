@@ -11,6 +11,6 @@ export default {
 }
 
 export {
-    FlexCarousel,
+    FlexCarousel
     // Slide
 }
