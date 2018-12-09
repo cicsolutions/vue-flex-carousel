@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { store } from '../store'
+// import { bus, events } from '../event-bus'
 export default {
   props: {
 
@@ -162,6 +164,8 @@ export default {
     // responsive
 
   },
+
+  data: () => ({ store }),
 }
 </script>
 
