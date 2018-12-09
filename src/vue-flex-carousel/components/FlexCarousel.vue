@@ -13,11 +13,6 @@
 
     </div>
 
-    <div class="m-6 flex fixed pin-b pin-l">
-      <!-- <button v-on:click="shuffle" class="p-3 bg-blue text-white rounded mr-2">Shuffle</button> -->
-      <button v-on:click="previous" class="p-3 bg-blue text-white rounded mr-2">Prev Slide</button>
-      <button v-on:click="next" class="p-3 bg-blue text-white rounded mr-2">Next Slide</button>
-    </div>
   </div>
 </template>
 
