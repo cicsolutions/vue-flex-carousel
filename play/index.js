@@ -1,338 +1,387 @@
 /* eslint-disable */
 
-import Vue from 'vue'
-import { play } from 'vue-play'
-import FlexCarousel from '../src/FlexCarousel.vue'
-// import Slide from '../src/Slide.vue'
+import Vue from "vue"
+import { play } from "vue-play"
+import FlexCarousel from "../src/components/vue-flex-carousel/FlexCarousel.vue"
+import Slide from "../src/components/vue-flex-carousel/FlexSlide.vue"
 
-play('FlexCarousel', module)
+const containerWidth = 500;
+const images = [
+  ' ',
+  ' ',
+  ' ',
+  ' ',
+];
+const slideCount = 4;
 
-const slides = [
-    {
-        title: 'Slide 1',
-        desc: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim, maxime.',
-        src: 'https://placehold.it/360x270'
-    },
-    {
-        title: 'Slide 2',
-        desc: 'Lorem ipsum dolor sit amet ',
-        src: 'https://placehold.it/360x270'
-    },
-    {
-        title: 'Slide 3',
-        desc: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ',
-        src: 'https://placehold.it/360x270'
-    },
-    {
-        title: 'Slide 4',
-        desc: 'Lorem ipsum dolor sit amet,  Enim, maxime.',
-        src: 'https://placehold.it/360x270'
+// const generateSlideImages = (createElement) => images.map((image) =>
+//   createElement(Slide, {}, [
+//     createElement(
+//       "img",
+//       {
+//         style: { width: "100%" },
+//         attrs: { src: image }
+//       }
+//     )
+//   ])
+// )
+
+const generateSlides = (createElement) => new Array(slideCount).forEach(() =>
+  createElement(Slide, {}, [
+    createElement(
+      "img",
+      {
+        style: { width: "100%" },
+        attrs: { src: 'https://picsum.photos/800/1120/?random' }
+      }
+    )
+  ])
+)
+
+const createContainer = (createElement, width, content) => createElement(
+  'div',
+  {
+    style: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: '40px'
     }
-]
-
-play('FlexCarousel', module)
-    .add('default', {
-        template: `<flex-carousel>
-        </flex-carousel>`,
-        components: {
-            FlexCarousel,
-        },
-        data () {
-            return {
-                slides: slides
-            }
+  },
+  [
+    createElement(
+      'div',
+      {
+        style: {
+          width: `${width}px`
         }
-    })
-    // .add('images', {
-    //     template: `<carousel-3d>
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
-    //
-    // .add('autoplay enabled', {
-    //     template: `<carousel-3d :autoplay="true">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
-    //
-    // .add('num of displayed', {
-    //     template: `<carousel-3d :display="3">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
-    //
-    // .add('even number displayed', {
-    //     template: `<carousel-3d :display="6" :bias="'right'">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
-    //
-    // .add('slides clickable', {
-    //     template: `<carousel-3d :clickable="true">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
-    //
-    // .add('loop disabled', {
-    //     template: `<carousel-3d :loop="false">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
-    //
-    // .add('controls visible', {
-    //     template: `<carousel-3d :controls-visible="true">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
-    //
-    // .add('custom controls', {
-    //     template: `<carousel-3d :controls-visible="true" :controls-prev-html="'&#10092;'" :controls-next-html="'&#10093;'"
-    //                             :controls-width="30" :controls-height="60">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
-    //
-    // .add('ltr direction', {
-    //     template: `<carousel-3d :dir="'ltr'">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
-    //
-    // .add('callbacks', {
-    //     template: `<carousel-3d :on-slide-change="onSlideChanged" :on-last-slide="onLastSlide" :on-main-slide-click="onMainSlideClick">
-    //         <slide v-for="(slide, i) in slides" :index="i" >
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     },
-    //     methods: {
-    //         onSlideChanged (index) {
-    //             console.log('onSlideChanged Callback Triggered', 'Slide Index ' + index)
-    //         },
-    //         onLastSlide (index) {
-    //             console.log('onLastSlide Callback Triggered', 'Slide Index ' + index)
-    //         },
-    //         onMainSlideClick () {
-    //             console.log('onMainSlideClick Callback Triggered')
-    //         }
-    //     }
-    // })
-    //
-    // .add('add/remove slides', {
-    //     template: `<div>
-    //         <carousel-3d :count="slideCount">
-    //             <slide v-for="(slide, i) in slideCount" :index="i">
-    //                 <h1>Slide {{slide}}</h1>
-    //             </slide>
-    //         </carousel-3d>
-    //         <button @click="addSlide">Add slide</button>
-    //         <button @click="removeSlide">Remove slide</button>
-    //     </div>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slideCount: 10
-    //         }
-    //     },
-    //     methods: {
-    //         addSlide () {
-    //             this.slideCount++
-    //         },
-    //         removeSlide () {
-    //             if (this.slideCount > 1) {
-    //                 this.slideCount--
-    //             }
-    //         }
-    //     }
-    // })
-    //
-    // .add('callbacks through emit', {
-    //     template: `<carousel-3d
-    //                   @before-slide-change="onSlideChange"
-    //                   @after-slide-change="onAfterSlideChanged"
-    //                   @last-slide="onLastSlide">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     },
-    //     methods: {
-    //         onAfterSlideChanged (index) {
-    //             console.log('@after-slide-changed Callback Triggered', 'Slide Index ' + index)
-    //         },
-    //         onSlideChange (index) {
-    //             console.log('@before-slide-change Callback Triggered', 'Slide Index ' + index)
-    //         },
-    //         onLastSlide (index) {
-    //             console.log('@last-slide Callback Triggered', 'Slide Index ' + index)
-    //         }
-    //     }
-    // })
-    //
-    // .add('3d Disabled', {
-    //     template: `<carousel-3d :disable3d="true" :space="370" :clickable="false" :controls-visible="true">
-    //         <slide v-for="(slide, i) in slides" :index="i">
-    //             <img :src="slide.src">
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     },
-    //     methods: {
-    //         onAfterSlideChanged (index) {
-    //             console.log('@after-slide-changed Callback Triggered', 'Slide Index ' + index)
-    //         },
-    //         onSlideChange (index) {
-    //             console.log('@before-slide-change Callback Triggered', 'Slide Index ' + index)
-    //         },
-    //         onLastSlide (index) {
-    //             console.log('@last-slide Callback Triggered', 'Slide Index ' + index)
-    //         }
-    //     }
-    // })
-    // .add('Scoped Slot', {
-    //     template: `<carousel-3d>
-    //         <slide v-for="(slide, i) in slides" :index="i" :key="i">
-    //             <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
-    //                 <div :style="{ textAlign: leftIndex >= 0 ? 'right' : 'left' }">
-    //                     right {{ rightIndex }} <br>
-    //                     left {{ leftIndex }}
-    //                 </div>
-    //                 <img :data-index="index" :data-is-current="isCurrent" :src="slide.src">
-    //             </template>
-    //         </slide>
-    //     </carousel-3d>`,
-    //     components: {
-    //         Carousel3d,
-    //         Slide
-    //     },
-    //     data () {
-    //         return {
-    //             slides: slides
-    //         }
-    //     }
-    // })
+      },
+      content
+    )
+  ]
+)
+
+play("FlexCarousel", module)
+  .add("Default", h => createContainer(
+      h, containerWidth, [h(FlexCarousel, {}, generateSlides(h))]
+    )
+  )
+//   .add("Too few per page", h => createContainer(
+//       h, containerWidth, [h(Carousel, { props: { perPage: 10, scrollPerPage: false } }, generateSlideImages(h))]
+//     )
+//   )
+//   .add("3 per page", h => createContainer(
+//       h, containerWidth, [h(Carousel, { props: { perPage: 3 } }, generateSlideImages(h))]
+//     )
+//   )
+//   .add("Scroll per page false", h => createContainer(
+//       h, containerWidth, [h(Carousel, { props: { scrollPerPage: false } }, generateSlideImages(h))]
+//     )
+//   )
+//   .add("Responsive", h => createContainer(
+//       h, containerWidth, [h(Carousel, { props: { perPageCustom: [[480, 3], [768, 4]] } }, generateSlideImages(h))]
+//     )
+//   )
+//   .add("Center and hide navigation", {
+//     template:
+//       `<div style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
+//         <carousel :per-page-custom="[[480, 1], [768, 4]]" :center-mode="true" :navigation-enabled="true" style="width: 500px;">
+//           <slide v-for="slide in slideCount">
+//             <img style="width: 100%;" src="https://res.cloudinary.com/ssenseweb/image/upload/b_white,c_lpad,g_south,h_1086,w_724/c_scale,h_560/v588/171924M176006_1.jpg" />
+//           </slide>
+//         </carousel>
+//       </div>`,
+//     components: {
+//       Carousel,
+//       Slide
+//     },
+//     data() {
+//       return {
+//         slideCount: 3
+//       }
+//     }
+//   })
+//   .add("Autoplay", h => createContainer(
+//     h, containerWidth, [h(Carousel, { props: { autoplay: true, autoplayHoverPause: false } }, generateSlideImages(h))]
+//   )
+// )
+// .add("Autoplay, Looping", h => createContainer(
+//   h, containerWidth, [h(Carousel, { props: { autoplay: true, autoplayHoverPause: false, loop: true } }, generateSlideImages(h))]
+// )
+// )
+//   .add("Autoplay, pause on hover", h => createContainer(
+//       h, containerWidth, [h(Carousel, { props: { autoplay: true, autoplayHoverPause: true } }, generateSlideImages(h))]
+//     )
+//   )
+//   .add("Dynamic, add or remove slides", {
+//     template:
+//       `<div style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
+//         <carousel style="width: 500px;">
+//           <slide v-for="slide in slideCount" :key="slide">
+//             <img style="width: 100%;" src="https://res.cloudinary.com/ssenseweb/image/upload/b_white,c_lpad,g_south,h_1086,w_724/c_scale,h_560/v588/171924M176006_1.jpg" />
+//           </slide>
+//         </carousel>
+//         <div style="float: left">
+//           <button v-on:click="addSlide">Add slide</button>
+//           <button v-on:click="removeSlide">Remove slide</button>
+//         </div>
+//       </div>`,
+//     components: {
+//       Carousel,
+//       Slide
+//     },
+//     data() {
+//       return {
+//         slideCount: 4
+//       }
+//     },
+//     methods: {
+//       addSlide() {
+//         this.slideCount++
+//       },
+//       removeSlide() {
+//         if (this.slideCount > 1) {
+//           this.slideCount--
+//         }
+//       }
+//     }
+//   })
+//   .add("With navigation buttons", h => createContainer(
+//       h, containerWidth, [h(Carousel, { props: { navigationEnabled: true } }, generateSlideImages(h))]
+//     )
+//   )
+//   .add("Navigation buttons and scrollPerPage false", h => createContainer(
+//       h, containerWidth, [h(Carousel, { props: { navigationEnabled: true, scrollPerPage: false } }, generateSlideImages(h))]
+//     )
+//   )
+//   .add("Navigation buttons and scrollPerPage false and loop", h => createContainer(
+//       h, containerWidth, [h(Carousel, { props: { navigationEnabled: true, scrollPerPage: false, loop: true } }, generateSlideImages(h))]
+//     )
+//   )
+//   .add("With customized navigation buttons", h => createContainer(
+//       h, containerWidth, [h('style', '.VueCarousel-navigation-button { font-size: 36px; }'), h(Carousel, { props: { paginationColor: '#fac232', paginationActiveColor: '#c9750c', navigationEnabled: true, navigationNextLabel: '👉', navigationPrevLabel: '👈' } }, generateSlideImages(h))]
+//     )
+//   )
+//   .add("With local event on pageChange", {
+//     template:
+//       `<div style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
+//         <carousel style="width: 500px;" @pageChange="onPageChange">
+//           <slide v-for="slide in slides" :key="slide">
+//             <img style="width: 100%;" :src="slide" />
+//           </slide>
+//         </carousel>
+//       </div>`,
+//     components: {
+//       Carousel,
+//       Slide
+//     },
+//     data() {
+//       return {
+//         slides: images
+//       }
+//     },
+//     methods: {
+//       onPageChange(currentPage) {
+//         this.$log(`page changed to ${currentPage}`)
+//       },
+//     }
+//   })
+//   .add("NavigateTo pages", {
+//     template:
+//       `<div style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
+//         <carousel style="width: 500px;" :navigateTo="newPage" v-on:pageChange="pageChanged">
+//           <slide v-for="slide in slides" :key="slide">
+//             <img style="width: 100%;" :src= slide />
+//           </slide>
+//         </carousel>
+//         <div style="float: left; z-index: 1000">
+//           <button style="position: absolute; bottom: 20px; right: 250px" v-on:click="gotoPage(0)">Goto page 1</button>
+//           <button style="position: absolute; bottom: 20px; right: 150px" v-on:click="gotoPage(1)">Goto page 2</button>
+//           <button style="position: absolute; bottom: 20px; right: 50px" v-on:click="gotoPage(2)">Goto page 3</button>
+//         </div>
+//       </div>`,
+//     components: {
+//       Carousel,
+//       Slide
+//     },
+//     data(){
+//       return {
+//         newPage:0,
+//         slides: images
+//       }
+//     },
+//     methods: {
+//       gotoPage(val) {
+//         this.newPage = val;
+//       },
+//       pageChanged(val) {
+//         this.newSlide = val;
+//       }
+//     }
+//   })
+//   .add("NavigateTo slides", {
+//     template:
+//       `<div style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
+//         <carousel style="width: 500px;" :navigateTo="newSlide" :scrollPerPage=false v-on:pageChange="pageChanged">
+//           <slide v-for="slide in slides" :key="slide.src">
+//             <img style="width: 100%;" :src= slide />
+//           </slide>
+//         </carousel>
+//         <div style="float: left; z-index: 1000">
+//           <button style="position: absolute; bottom: 20px; right: 250px" v-on:click="gotoSlide(0)">Goto slide 1</button>
+//           <button style="position: absolute; bottom: 20px; right: 150px" v-on:click="gotoSlide(1)">Goto slide 2</button>
+//           <button style="position: absolute; bottom: 20px; right: 50px" v-on:click="gotoSlide(5)">Goto slide 5</button>
+//         </div>
+//       </div>`,
+//     components: {
+//       Carousel,
+//       Slide
+//     },
+//     data(){
+//       return {
+//         newSlide: 0,
+//         slides: images
+//       }
+//     },
+//     methods: {
+//       gotoSlide(val) {
+//         this.newSlide = val;
+//       },
+//       pageChanged(val) {
+//         this.newSlide = val;
+//       }
+//     }
+//   })
+//   .add("With spacePadding 100px", h => createContainer(
+//       h, containerWidth, [h(Carousel, { props: { spacePadding: 100, perPage: 1} }, generateSlideImages(h))]
+//       )
+//   )
+//   .add("Transition end", {
+//     template: `<div style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
+//         <carousel
+//           style="width: 500px;"
+//           @transitionEnd="handleTransitionEnd"
+//         >
+//           <slide v-for="slide in slides" :key="slide.src">
+//             <img style="width: 100%;" :src= slide />
+//           </slide>
+//         </carousel>
+//       </div>`,
+//     data() {
+//       return {
+//         slides: images
+//       }
+//     },
+//     components: {
+//       Carousel,
+//       Slide
+//     },
+//     methods: {
+//       handleTransitionEnd() {
+//         alert('transition end!')
+//       }
+//     }
+//   })
+//   .add("Custom width", {
+//     components: { Carousel, Slide },
+//     render: h => {
+//       return createContainer(
+//         h, containerWidth, [h(Carousel, {
+//           props: {
+//             perPage: 1,
+//             spacePadding: 30
+//           }
+//         }, [new Array(8).fill(0).map((item, index) => {
+//           return h(Slide, {}, [h("div", {
+//             style: {
+//               width: "100%",
+//               height: "400px",
+//               lineHeight: "400px",
+//               color: "#fff",
+//               textAlign: "center",
+//               fontSize: "30px",
+//               backgroundColor: (index % 2 === 0) ? "#42b983" : "#ff3c3c"
+//             }
+//           }, [index])])
+//         })])]
+//       )
+//     }
+//   })
+//   .add("Emit selected element dataset", {
+//     template:
+//       `<div style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
+//         <carousel style="width: 500px;" :navigateTo="newSlide" :scrollPerPage=false>
+//           <slide v-for="(slide, index) in slides" :key="slide.src" :data-index="index" v-on:slideClick="onSlideClick">
+//             <img style="width: 100%;" :src= slide />
+//           </slide>
+//         </carousel>
+//       </div>`,
+//     components: {
+//       Carousel,
+//       Slide
+//     },
+//     data(){
+//       return {
+//         newSlide: 0,
+//         slides: images
+//       }
+//     },
+//     methods: {
+//       onSlideClick (data) {
+//         this.$log(data)
+//       }
+//     }
+//   })
+//   .add("Get and set current Page with v-model", {
+//     template: `
+// <div>
+// <div style="text-align: center;">
+//     <input type="number" v-model="currentPage" style="text-align: center; font-size: 3em; width: 100px;">
+// </div>
+// <div style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
+//         <carousel
+//           style="width: 300px;"
+//           v-model="currentPage"
+//           :perPage="1"
+//         >
+//           <slide v-for="slide in slides" :key="slide.src">
+//             <img style="width: 100%;" :src= slide />
+//           </slide>
+//         </carousel>
+//       </div>
+// </div>`,
+//     data() {
+//       return {
+//         currentPage: 0,
+//         slides: images
+//       }
+//     },
+//     components: {
+//       Carousel,
+//       Slide
+//     },
+//     methods: {
+//
+//     }
+//   })
+//   .add("With adjustableHeight", {
+//     template:
+//       `<div style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
+//         <carousel style="width: 300px;" :adjustableHeight="true" :navigationEnabled="true" :perPage="1">
+//           <slide v-for="(slide, idx) in slides">
+//             <div style="width: 300px;">
+//               <img :style="'height: ' + ((idx + 1) * 50) + 'px;'" :src="slide" />
+//             </div>
+//           </slide>
+//         </carousel>
+//       </div>`,
+//     components: {
+//       Carousel,
+//       Slide
+//     },
+//     data() {
+//       return {
+//         slides: images
+//       }
+//     }
+// })

@@ -1,9 +1,9 @@
 import FlexCarousel from './FlexCarousel.vue'
-// import Slide from './Slide.vue'
+import Slide from './FlexSlide.vue'
 
 const install = (Vue) => {
     Vue.component('flex-carousel', FlexCarousel)
-    // Vue.component('slide', Slide)
+    Vue.component('slide', Slide)
 }
 
 export default {
@@ -12,5 +12,5 @@ export default {
 
 export {
     FlexCarousel,
-    // Slide
+    Slide
 }

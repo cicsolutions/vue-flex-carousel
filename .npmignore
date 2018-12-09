@@ -1,3 +1,13 @@
-test
-.gitignore
-.travis.yml
+
+dist/*
+!dist/vue-flex-carousel*
+
+play/
+public/
+
+src/*
+!src/vue-flex-carousel/
+
+babel.config.js
+play.config.js
+tailwind.js
