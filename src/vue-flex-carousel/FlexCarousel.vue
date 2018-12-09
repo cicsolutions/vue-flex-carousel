@@ -5,6 +5,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'flex-carousel',
 
@@ -39,4 +40,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 </style>

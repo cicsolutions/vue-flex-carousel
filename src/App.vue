@@ -1,27 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <div class="flex justify-between items-center p-3 bg-grey-lighter shadow border-b">
+      <img alt="Vue logo" src="./assets/logo.png" class="w-full" style="max-width: 50px;">
+      <h1 class="">Vue Flex Carousel Sandbox</h1>
+      <img alt="Vue logo" src="./assets/logo.png" class="w-full invisible" style="max-width: 50px;">
+    </div>
+
+    <div class="h-full flex items-center justify-center">
+      <flex-carousel></flex-carousel>
+    </div>
+
   </div>
 </template>
 
 <script>
-import './styles/tailwind.scss'
+import './assets/app.scss'
+
+import { FlexCarousel } from './vue-flex-carousel'
 
 export default {
   name: 'app',
   components: {
-
+    FlexCarousel
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
