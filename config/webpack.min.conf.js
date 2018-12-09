@@ -1,22 +1,18 @@
 /* eslint-disable */
 
-const webpack = require('webpack')
+// const webpack = require('webpack')
+const merge = require('webpack-merge');
 const base = require('./webpack.base.conf')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-var config = Object.assign({}, base)
-
-config.output.filename = 'vue-flex-carousel.min.js'
-
-config.plugins = (config.plugins || []).concat([
-  new webpack.optimize.UglifyJsPlugin({
-    compress: { warnings: false },
-    sourceMap: false
-  }),
-  new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: '"production"'
-    }
-  }),
-])
-
-module.exports = config
+module.exports = merge(base, {
+  mode: 'production',
+  output: {
+    filename: 'vue-flex-carousel.min.js'
+  },
+  plugins: [
+    new UglifyJsPlugin({
+      sourceMap: false
+    })
+  ]
+});
