@@ -1,11 +1,6 @@
 {
   "presets": [
-    ["@babel/preset-env", {
-      "targets": {
-        "browsers": ["last 2 versions", "IE 11"]
-      },
-      "useBuiltIns": "usage"
-      }]
-    ],
-    "comments": false
-  }
+    ["env", { "modules": false }],
+    "stage-3"
+  ]
+}
