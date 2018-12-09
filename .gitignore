@@ -20,4 +20,8 @@ yarn-error.log*
 *.sw*
 
 public/
+
+src/*
+!src/vue-flex-carousel/
+
 package-lock.json
