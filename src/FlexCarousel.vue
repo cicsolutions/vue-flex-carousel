@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Please God!  Let this work!</h1>
+    <h1>Vue Flex Carousel - Coming Soon!</h1>
   </div>
 </template>
 
