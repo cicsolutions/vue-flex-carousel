@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import './styles/tailwind.scss'
 
 export default {
   name: 'app',
