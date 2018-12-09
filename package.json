@@ -50,6 +50,7 @@
     "node-sass": "^4.11.0",
     "poi": "^12.0.1",
     "sass-loader": "^7.1.0",
+    "tailwindcss": "^0.7.2",
     "vue-play": "^3.2.1",
     "vue-template-compiler": "^2.5.17"
   },
@@ -69,6 +70,7 @@
   },
   "postcss": {
     "plugins": {
+      "tailwindcss": "./tailwind.js",
       "autoprefixer": {}
     }
   },
