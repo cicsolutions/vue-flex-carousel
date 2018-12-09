@@ -1,6 +1,6 @@
 {
   "name": "vue-flex-carousel",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A touch-friendly, responsive vuejs carousel component leveraging flexbox and vuejs's transition engine to create amazing javascript carousels.",
   "main": "dist/vue-flex-carousel.umd.min.js",
   "module": "dist/vue-flex-carousel.esm.js",
