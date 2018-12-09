@@ -2,8 +2,8 @@
 
 import Vue from "vue"
 import { play } from "vue-play"
-import FlexCarousel from "../src/vue-flex-carousel/FlexCarousel.vue"
-import Slide from "../src/vue-flex-carousel/FlexSlide.vue"
+import FlexCarousel from "../src/components/vue-flex-carousel/FlexCarousel.vue"
+import Slide from "../src/components/vue-flex-carousel/FlexSlide.vue"
 
 const containerWidth = 500;
 const images = [
