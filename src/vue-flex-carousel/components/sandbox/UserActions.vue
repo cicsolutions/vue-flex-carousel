@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col p-2 bg-blue-lightest border border-blue-light rounded">
-    <h3 class="mt-2 mb-3">User Actions</h3>
+    <h3>User Actions</h3>
 
     <!-- TODO: create a mixin for grids!! -->
     <!-- TODO: change these buttons to use FlexButton -->

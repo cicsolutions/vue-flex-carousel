@@ -69,5 +69,10 @@ export default {
   //   width: 100%;
   // }
 
+  h3 {
+    margin-top: .5rem;
+    margin-bottom: 1rem;
+  }
+
 }
 </style>

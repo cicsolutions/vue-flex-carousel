@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col p-2 bg-indigo-lightest border border-indigo-light rounded">
-    <h4>CarouselEvents</h4>
+    <h3>Carousel Events</h3>
     <p>Coming soon!</p>
   </div>
 </template>
