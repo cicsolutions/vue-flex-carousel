@@ -6,6 +6,35 @@
 
 <script>
 export default {
+  name: 'flex-carousel',
+
+  props: {
+
+  },
+
+  components: {  },
+
+  data() {
+      return {
+
+      }
+  },
+
+  computed: {
+
+  },
+
+  methods: {
+
+  },
+
+  mounted() {
+
+  },
+
+  created() {
+
+  }
 }
 </script>
 
