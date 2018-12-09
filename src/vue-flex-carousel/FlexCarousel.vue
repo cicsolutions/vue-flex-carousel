@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Vue Flex Carousel - Coming Soon!</h1>
+    <h1>Vue Flex Carousel - Coming Real Soon!</h1>
   </div>
 </template>
 
