@@ -35,7 +35,8 @@
     "e2e": "vue-cli-service e2e",
     "lint": "vue-cli-service lint",
     "e2e:open": "vue-cli-service e2e:open",
-    "cache:clean": "rm -rf node_modules && yarn cache clean --force && yarn install"
+    "cache:clean": "rm -rf node_modules && yarn cache clean --force && yarn install",
+    "deploy": "git push https://github.com/cicsolutions/vue-flex-carousel master"
   },
   "dependencies": {
     "vue": "^2.5.17"
