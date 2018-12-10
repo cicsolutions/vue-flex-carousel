@@ -1,154 +1,210 @@
 import Vue from "vue";
 import { bus, events } from '../event-bus'
+import { capitalize } from '../utils/capitalize'
 
 // state
 const state = {
   carouselReady: false,
   slides: [],
-  // pagesCount: 0,
-  // slidesCount: 0,
-  currentPageIndex: 0,
-  currentSlideIndex: 0,
-  hasSlottedSlides: false,
+  activePageIndex: 0,
+  activeSlideIndex: 0
 }
 
 // getters
 const getters = {
-  pagesCount:  ({ state }) => Math.ceil(state.slidesCount / state.slidesPerPage),
-  slidesCount:  ({ state }) => state.slides.length,
-  previous: ({ state, getters }) => {
-    let currentIndex = state[`current${state.scrollElement}Index`],
-      lastIndex = state.slidesCount - 1
+  slidesCount: (state) => state.slides.length,
+  pagesCount: (state, getters) => Math.ceil(getters('slidesCount') / state.slidesPerPage),
+  activeSlide: (state) => state.slides.find((slide, index) => index == state.activeSlideIndex),
+  // activePage: ({ state }) => state.slides.find((slide, index) => index == state.activePageIndex),
+  prev: (state, getters, element) => {
+    let capElement = element.capitalize(),
+      activeIndex = state[`active${capElement}Index`],
+      lastIndex = getters(`${element}sCount`) - 1
 
-    if (currentIndex == 0) {
-      return (state.loop) ? lastIndex : false
+    if (activeIndex == 0) {
+      return (state.loop) ? lastIndex : false // NOTE: returning false if not looping
     } else {
-      return currentIndex - 1
+      return activeIndex - 1
     }
   },
-  next: ({ state, getters }) => {
-    let currentIndex = state[`current${state.scrollElement}Index`],
-      lastIndex = getters('slidesCount') - 1 // CICS TODO: this needs to consider slide vs. page and the scroll element
+  next: (state, getters, element) => {
+    let capElement = element.capitalize(),
+      activeIndex = state[`active${capElement}Index`],
+      lastIndex = getters(`${element}sCount`) - 1
 
-    if (currentIndex == lastIndex) {
-      return (state.loop) ? 0 : false
+    if (activeIndex == lastIndex) {
+      return (state.loop) ? 0 : false // NOTE: returning false if not looping
     } else {
-      return currentIndex + 1
-    }
-
-    return nextIndex
-  },
-  moveOffset: ({ state, getters }, newIndex) => {
-    // calculate the offset to move dynamically by the scrollElement and slideCount?
-    // then multiply by the change in index?
-    let moveOffset = 0;
-    if (state.scrollElement == 'Page') {
-      moveOffset = state.stage.offsetWidth
+      return activeIndex + 1
     }
   }
+  // moveOffset: ({ state, getters }, newIndex) => {
+  //   // calculate the offset to move dynamically by the scrollElement and slideCount?
+  //   // then multiply by the change in index?
+  //   // let moveOffset = 0;
+  //   // if (state.scrollElement == 'Page') {
+  //   //   moveOffset = state.stage.offsetWidth
+  //   // }
+  //   return 0
+  // }
 }
 
 // mutations
-export const mutations = {
+const mutations = {
   setProp: (state, prop) => Vue.set(state, prop.key, prop.value),
-  setSlides: (state, slides) => state.slides = slides,
+  appendSlides: (state, slides) => state.slides = [...state.slides, slides],
   setCarouselReady: (state, value) => state.carouselReady = value,
   setScrollElement: (state, value) => state.scrollElement = value,
-  setHasSlottedSlides: (state, value) => state.hasSlottedSlides = value,
-  setCurrentIndex: (state, index) => state[`current${state.scrollElement}Index`] = index,
+  setActiveIndex: (state, { element, index }) => state[`active${element}Index`] = index // NOTE: element is already capitalized in go() action below
 }
 
 // actions
 const actions = {
-  init: async ({ dispatch, commit, state }, carousel) => {
+  init: async ({ getters, dispatch, commit }, carousel) => {
 
-      // save carousel props to store
-      for (var key in carousel.$props) {
-        commit('setProp', { key, value: carousel.$props[key] })
+    // save carousel props to store & any slides that are passed via slides prop
+    await dispatch('_saveProps', carousel.$props)
+
+    // look for slides in default slot
+    if (!carousel.$slots.default) {
+
+      // throw error if there were no slides in the props either
+      if (!getters('slidesCount')) {
+        throw new SyntaxError('Vue-Flex-Carousel Error: No slide data found in slides property or <slide> elements inside <flex-carousel>.')
       }
 
-      // assess slides
-      if (carousel.$props.slides.length) {
-        // save slides passed as prop object to the store
-        commit('setSlides', carousel.$props.slides)
-        // commit('setSlidesCount', state.slides.length)
+    } else {
+
+      // filter out elements with tag: undefined from the carousel default slot
+      let slotSlides = carousel.$slots.default.filter((elm) => elm.tag)
+
+      console.log(slotSlides)
+
+      // make sure each root element in the default slot is a slide-input slide
+      if (!slotSlides.every((elm) => elm.tag.includes('slide-input'))) {
+        throw new SyntaxError('Vue-Flex-Carousel Error: Direct descendants of <flex-carousel> element must be <slide> elements.')
       } else {
 
-        if (!carousel.$slots.default) {
-            throw new SyntaxError('Vue-Carousel Error: No <slide> elements found inside <carousel>.')
-        }
+        // slot slides look good!  Let's append them to the store
+        commit('appendSlides', slotSlides)
 
-        // filter out elements with tag: undefined from the carousel default slot
-        let slides = carousel.$slots.default.filter((elm) => elm.tag)
-
-        // make sure each element in the default slot is a carousel-slide
-        if (!slides.every((elm) => elm.tag.includes('carousel-slide'))) {
-            throw new SyntaxError('Vue-Carousel Error: Direct descendants of <carousel> element must be <slide> elements.')
-        }
-
-        // save slide count to store
-        commit('setSlidesCount', slides.length)
       }
+    }
 
-      // CICS TODO: need to check the value of the passed go-to prop and set the current index to said value :)
-      // set the starting slide based on the passed props
-      // let starting_slide = state.goToSlide
+    // CICS TODO: need to check the value of the passed go-to prop and set the current index to said value :)
+    // set the starting slide based on the passed props
+    // let starting_slide = state.goToSlide
 
-      // emit callback for onCarouselReady
-      bus.$emit(events.callbacks.onCarouselReady, {
-        slidesCount: state.slidesCount
-      })
+    let reportData = {
+      slidesCount: getters('slidesCount'),
+      slidesPerPage: state.slidesPerPage,
+      pagesCount: getters('pagesCount')
+    }
 
-      // commit carouselReady
-      commit('setCarouselReady', true)
+    // emit callback for onCarouselReady
+    bus.$emit(events.callbacks.onCarouselReady, reportData)
 
-      // CICS NOTE: can get the offsetWidth and offsetHeight of the stage to capture the dimensions!
+    return 'done'
+
   },
-  // goToPrevious: ({ state, getters, commit }) => {
-  //   let previous = getters('previous')
-  //   if (previous !== false) {
-  //     bus.$emit(events.callbacks.onGoToPrevious, { slideIndex: previous })
-  //     commit('setCurrentIndex', previous)
-  //   }
-  // },
-  // goToNext: ({ state, getters, commit }) => {
-  //   let next = getters('next')
-  //   if (next !== false) {
-  //     bus.$emit(events.callbacks.onGoToNext, { slideIndex: next })
-  //     commit('setCurrentIndex', next)
-  //   }
-  // },
-  // goTo: ({ state, commit }, index) => {
-  //   let currentIndex = state[`current${state.scrollElement}Index`]
-  //   if (index != currentIndex) {
-  //     bus.$emit(events.callbacks.onGoTo, { slideIndex: index })
-  //     commit('setCurrentIndex', index)
-  //   }
-  // }
+
+  _saveProps: async ({ state, getters, commit }, props) => {
+
+    // NOTE: slide data can be passed as a prop
+    // and if so, that slide data is being added to the store in this step
+
+    // CICS TODO: need a good way to validate the slide data -- compare it against a mixin?
+
+    // options #1 - may have issues in IE? Pollyfill that biotch!  // CICS TODO: IE testing :P
+    Object.keys(props).forEach((key) => commit('setProp', { key, value: props[key] }))
+
+    // option #2
+    // for (var key in props) {
+    //   if (!props.hasOwnProperty(key)) continue;
+    //   commit('setProp', { key, value: props[key] })
+    // }
+  },
+
+  go: ({ state, getters, commit }, { action, element, index }) => {
+    let capAction = action.capitalize(),
+      capElement = element.capitalize(),
+      prevNext = getters(action, element), // NOTE: value will be false if not allowed to prev/next
+      activeIndex = state[`active${capElement}Index`]
+
+    if (index && index != activeIndex) { // NOTE: if true, we've been passed an index, thus goTo(element, index) is the callback to fire
+
+      // going to the slide/page index passed - // CICS TODO: need a check here b/c we could be accepting a value passed by user
+
+      let callbackName = `onGoTo${capElement}`,
+        reportData = {
+          action: capAction,
+          element: capElement,
+          index: index
+        }
+
+      // fire goTo callback
+      bus.$emit(events.callbacks[callbackName], reportData)
+
+      // update active index for the slide/page
+      commit('setActiveIndex', reportData)
+
+    } else {
+      // CICS NOTE: Otherwise, we are prev/nexting, so goToPev/Next(element) would be the callback to fire
+
+      if (prevNext !== false) { // if allowed to prev/next
+
+        let callbackName = `onGo${capAction}${capElement}`,
+          reportData = {
+            action: capAction,
+            element: capElement,
+            index: prevNext
+          }
+
+        // fire goPrev or goNext callback
+        bus.$emit(events.callbacks[callbackName], reportData)
+
+        // update active index for the slide/page
+        commit('setActiveIndex', reportData)
+
+      }
+    }
+  }
 }
 
 const createStore = ({ state, getters, mutations, actions }) => new Vue({
-  data () {
-    return { state }
+  data: () => ({ state }),
+  computed: {
+    context() {
+      return {
+        state: this.state,
+        commit: this.commit,
+        getters: this.getters,
+        dispatch: this.dispatch
+      }
+    }
   },
   methods: {
     commit(mutationName, payload) {
       mutations[mutationName](this.state, payload)
     },
     getters(getterName, payload) {
-      return getters[getterName]({ state: this.state, getters: this.getters }, payload)
+      return getters[getterName](this.state, this.getters, payload)
     },
-    dispatch(actionName, payload) {
-      let store = { state: this.state, getters: this.getters, dispatch: this.dispatch, commit: this.commit }
-      return actions[actionName](store, payload)
-    },
-  },
+    async dispatch(actionName, payload) {
+      try {
+        return await actions[actionName](this.context, payload)
+      } catch(error) {
+        console.log(error)
+      }
+    }
+  }
 })
 
-// CICS TODO: test the feasability of having the store be the export default - not really priority but would be best setup
-export const store = createStore({
+const store = createStore({
   state,
   getters,
   mutations,
   actions
 })
+
+export default store

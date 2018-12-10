@@ -1,26 +1,6 @@
-<template>
-  <div>
-    <h2>Carousel Input</h2>
-    <sandbox></sandbox>
-  </div>
-</template>
-
-<script>
-import { store } from '../store'
-// import { bus, events } from '../event-bus'
-
-import Sandbox from './sandbox/SandboxContainer'
-
 export default {
-  components: { Sandbox },
-
   props: {
-
     // carousel
-    slideDirection: { // CICS NOTE: this should be totally handled by flexbox and no javascript math/logic!
-      type: String,
-      default: 'forward' // options = forward/backward
-    },
     slidesPerPage: {
       type: Number,
       default: 1
@@ -32,6 +12,10 @@ export default {
     loop: { // CICS TODO: change this to cycle
       type: Boolean,
       default: false
+    },
+    advanceDirection: { // CICS NOTE: this should be totally handled by flexbox and no javascript math/logic!
+      type: String,
+      default: 'forward' // options = forward/backward
     },
     easing: {
       type: String,
@@ -125,7 +109,23 @@ export default {
       type: [String, Number],
       default: 'auto'
     },
+    minWidth: {
+      type: [String, Number],
+      default: 'auto'
+    },
+    maxWidth: {
+      type: [String, Number],
+      default: 'auto'
+    },
     height: {
+      type: [String, Number],
+      default: 'auto'
+    },
+    minHeight: {
+      type: [String, Number],
+      default: 'auto'
+    },
+    maxHeight: {
       type: [String, Number],
       default: 'auto'
     },
@@ -154,6 +154,7 @@ export default {
     //   default: 0
     // },
 
+    // slide content
     slides: {
       type: Array,
       default: null
@@ -167,15 +168,24 @@ export default {
     transitionOnInitialRender: {
       type: Boolean,
       default: true
-    }
+    },
 
     // responsive
 
-  },
+    // shadows
+    carouselShadow: {
+      type: String,
+      default: 'none' // none/sm/md/lg
+    },
+    stageInnerShadow: {
+      type: String,
+      default: 'none' // none/sm/md/lg
+    },
+    slideInnerShadow: {
+      type: String,
+      default: 'none' // none/sm/md/lg
+    }
 
-  data: () => ({ store }),
+
+  }
 }
-</script>
-
-<style lang="scss">
-</style>

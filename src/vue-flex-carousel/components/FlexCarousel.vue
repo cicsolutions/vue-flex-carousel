@@ -1,104 +1,194 @@
 <template>
-  <div class="flex-carousel">
+  <div>
 
-    <div class="rounded p-4 bg-grey-light">
+    <section :id="`vue-flex-carousel-${_uid}`" class="vue-flex-carousel shadow-lg">
 
-      <div class="flex-carousel__stage">
-        <transition name="fade" appear>
-          <div class="flex-carousel__slide h-full w-full" v-for="slide in activeSlides" :key="slide">
-            <img class="rounded" :src="activeSlide.bgImageUrl">
+      <!-- Top Nav - Outside -->
+      <!-- <flex-navbar v-if="navs && showNavigation('top-outside')" location="top" position="outside"/> -->
+
+      <div class="vue-flex-carousel__inner-wrap">
+
+        <!-- Left Side Nav - Outside -->
+        <!-- <button v-if="navs && showNavigation('sides-outside')"
+          action="go-prev-slide"
+          @click="goToPrevious"
+          class="vue-flex-carousel__btn-previous">
+        </button> -->
+
+        <div class="vue-flex-carousel__inner bg-grey-light border border-grey rounded p-4 relative">
+
+          <!-- Left Side Nav - Inside -->
+          <!-- <button v-if="navs && showNavigation('sides-inside')"
+            action="go-prev-slide"
+            @click="goToPrevious"
+            class="vue-flex-carousel__btn-previous absolute pin-l pin-t pin-b z-10">
+          </button> -->
+          <div class="vue-flex-carousel_stage-wrap relative p-1 bg-grey border border-grey-dark"> <!-- CICS NOTE: place inner shadow here? -->
+
+            <!-- Top Inside Nav -->
+            <!-- <flex-navbar v-if="navs && showNavigation('top-inside')" location="top" position="inside" class="z-10"></flex-navbar> -->
+
+            <!-- STAGE -->
+            <flex-stage/>
+
+            <!-- Bottom Nav - Inside -->
+            <!-- <flex-navbar v-if="navs && showNavigation('bottom-inside')" location="bottom" position="inside" class="z-10"></flex-navbar> -->
+
           </div>
-        </transition>
+
+          <!-- Right Side Nav - Inside -->
+          <!-- <button v-if="navs && showNavigation('sides-inside')"
+            type="next"
+            @click="goToNext"
+            class="vue-flex-carousel__btn-next absolute pin-r pin-t pin-b z-10">
+          </button> -->
+
+        </div>
+
+        <!-- Right Side Nav - Outside -->
+        <!-- <button v-if="navs && showNavigation('sides-outside')"
+          type="next"
+          @click="goToNext"
+          class="vue-flex-carousel__btn-next">
+        </button> -->
+
       </div>
 
-    </div>
+      <!-- Bottom Nav - Outside -->
+      <!-- <flex-navbar v-if="navs && showNavigation('bottom-outside')" location="bottom" position="outside"/> -->
+
+      <!-- NOTE: Container to allow slotted slides to render so we can extract the slide data we need. -->
+      <!-- This container should NEVER be displayed. Slides are processed on init and rendered manually above. -->
+      <div v-show="false">
+        <slot/>
+      </div>
+
+    </section>
+
+    <!-- SANDBOX CONTROLS -->
+    <sandbox/>
 
   </div>
 </template>
 
 <script>
+import store from '../store'
+import { bus, events } from '../event-bus'
+
+import FlexStage from './FlexStage'
+import FlexNavbar from './FlexNavbar'
+import FlexButton from './FlexButton'
+import Sandbox from './sandbox/SandboxContainer'
+
+import carouselProps from '../mixins/carouselProps'
 
 export default {
   name: 'flex-carousel',
 
-  props: {
+  components: { FlexStage, FlexNavbar, FlexButton, Sandbox },
 
-  },
+  mixins: [carouselProps],
 
-  components: {  },
-
-  data() {
-    return {
-      show: true,
-      currentIndex: 0,
-      slides: [
-        {
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisicing.',
-          bgColor: '',
-          bgImageUrl: "https://placeimg.com/640/480/nature/1",
-          innerHtml: `<div>Hi!  I'm html content!</div>`,
-          data: {}
-        },
-        {
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Conseq.',
-          bgColor: '',
-          bgImageUrl: "https://placeimg.com/640/480/nature/2",
-          innerHtml: ``,
-          data: {}
-        },
-        {
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisicing e.',
-          bgColor: '',
-          bgImageUrl: "https://placeimg.com/640/480/nature/3",
-          innerHtml: ``,
-          data: {}
-        }
-      ]
-    }
-  },
+  data: () => ({ store }),
 
   computed: {
-    activeSlide() {
-      return this.slides.find((slide, index) => index == this.currentIndex)
+    carousel() {
+      return this.store.state
     },
-    activeSlides() {
-      return this.slides.filter((slide, index) => index == this.currentIndex)
+    navs() {
+      return this.carousel.navLocations
+    },
+    showNavigation() {
+      return nav => {
+        // CICS TODO: noodle on it.  Is there a way to optimize/simplify this logic?
+        return (
+          // top-outside
+          (nav == 'top-outside'
+            && (this.navs == 'top'
+              || (this.navs.includes('top') && !this.navs.includes('top(inside)'))
+              || (this.navs.includes('top(outside)') && this.navs.includes('top(inside)'))
+            )
+          ) ||
+
+          // top-inside
+          (nav == 'top-inside' && this.navs.includes('top(inside)')) ||
+
+          // bottom-inside
+          (nav == 'bottom-inside' && this.navs.includes('bottom(inside)')) ||
+
+          // bottom-outside
+          (nav == 'bottom-outside'
+            && (this.navs == 'bottom'
+              || (this.navs.includes('bottom') && !this.navs.includes('bottom(inside)'))
+              || (this.navs.includes('bottom(outside)') && this.navs.includes('bottom(inside)'))
+            )
+          ) ||
+
+          // sides-outside
+          (nav == 'sides-outside'
+            && (this.navs == 'sides'
+              || (this.navs.includes('sides') && !this.navs.includes('sides(inside)'))
+              || (this.navs.includes('sides(outside)') && this.navs.includes('sides(inside)')))
+          ) ||
+
+          // sides-inside
+          (nav == 'sides-inside' && this.navs.includes('sides(inside)'))
+        )
+      }
+    },
+    activeSlide() {
+      return this.store.getters('activeSlide')
     }
   },
 
   methods: {
-    next: function() {
-      this.currentIndex = this.currentIndex == this.slides.length - 1 ? 0 : this.currentIndex + 1;
-    },
-    previous: function() {
-      this.currentIndex = this.currentIndex == 0 ? this.slides.length - 1 : this.currentIndex - 1;
-    },
+    _attachEventListeners() {
+      let vm = this
+      // api callbacks
+      Object.keys(events.callbacks).forEach(
+        (key) => bus.$on(events.callbacks[key], (data) => vm.$emit(events.callbacks[key], data))
+      )
+    }
   },
 
   mounted() {
+    // attach event listeners
+    if (!this.$isServer) { // CICS TODO: understand isServer better
+      this._attachEventListeners()
+    }
 
+
+    // var width = 100, // width of a progress bar in percentage
+    //     perfData = window.performance.timing, // The PerformanceTiming interface
+    //     EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart), // Calculated Estimated Time of Page Load which returns negative value.
+    //     time = parseInt((EstimatedTime/1000)%60)*100; //Converting EstimatedTime from miliseconds to seconds.
+    //
+    // console.log(time)
   },
 
   created() {
+    // initialize carousel
+    let vm = this
+    this.store.dispatch('init', vm)
+      .then(() => {
+        // commit carouselReady
+        vm.store.commit('setCarouselReady', true)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  },
 
+  beforeDestroy() {
+    // CICS TODO: detach event listeners - not needed for callbacks b/c they are just $emit calls
   }
+
 }
 </script>
 
 <style lang="scss" scoped>
-.flex-carousel {
+.vue-flex-carousel {
 
-  &__stage {
-
-  }
-
-  &__slide {
-
-
-    img {
-      display: block;
-    }
-  }
 
 }
 

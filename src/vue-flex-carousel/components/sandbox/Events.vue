@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col p-2 bg-indigo-lightest border border-indigo-light rounded">
-    <h3>Carousel Events</h3>
-    <p>Coming soon!</p>
+    <h3>Events</h3>
+    <p>Coming soon!<br />Maybe name this Carousel Callbacks?</p>
   </div>
 </template>
 
