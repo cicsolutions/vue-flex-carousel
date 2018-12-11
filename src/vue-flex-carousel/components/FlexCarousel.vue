@@ -1,22 +1,22 @@
 <template>
   <div>
 
-    <section :id="`vue-flex-carousel-${_uid}`" :class="['vue-flex-carousel', carouselClasses]" v-show="carousel.carouselReady">
+    <section :id="`vue-flex-carousel-${_uid}`" :class="['carousel', carouselClasses]" v-show="carousel.carouselReady">
 
       <!-- Top Nav - Outside -->
       <flex-navbar location="top" position="outside"/>
 
-      <div class="vue-flex-carousel__inner-wrap">
+      <div class="carousel__inner-wrap">
 
         <!-- Left Side Nav - Outside -->
         <flex-navbar location="left" position="inside"/>
 
-        <div class="vue-flex-carousel__inner bg-grey-light border border-grey rounded p-4 relative">
+        <div class="carousel__inner bg-grey-light border border-grey rounded p-4 relative">
 
           <!-- Left Side Nav - Inside -->
           <flex-navbar location="left" position="inside"/>
 
-          <div class="vue-flex-carousel_stage-wrap relative p-1 bg-grey border border-grey-dark">
+          <div class="carousel_stage-wrap relative p-1 bg-grey border border-grey-dark">
 
             <!-- Top Inside Nav -->
             <flex-navbar location="top" position="inside" class="z-10"/>
@@ -64,7 +64,6 @@ import { bus, events } from '../event-bus'
 
 import FlexStage from './FlexStage'
 import FlexNavbar from './FlexNavbar'
-import FlexButton from './FlexButton'
 import CarouselSandbox from './sandbox/SandboxContainer'
 
 export default {
@@ -72,7 +71,7 @@ export default {
 
   mixins: [flexCarousel, carouselProps],
 
-  components: { FlexStage, FlexNavbar, FlexButton, CarouselSandbox },
+  components: { FlexStage, FlexNavbar, CarouselSandbox },
 
   computed: {
     navs() {
@@ -151,7 +150,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.vfcarousel {
+.carousel {
 
 
 }

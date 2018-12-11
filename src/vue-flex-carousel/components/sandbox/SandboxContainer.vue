@@ -1,5 +1,5 @@
 <template>
-  <div class="vue-flex-carousel__sandbox">
+  <div class="vfcarousel__sandbox">
 
     <div class="fixed pin-b pin-l m-2 max-w-xs">
       <actions/>

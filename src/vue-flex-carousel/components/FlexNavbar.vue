@@ -1,9 +1,9 @@
 <template>
-  <div :class="['vue-flex-carousel__nav border border-teal', containerClasses]" v-if="showNavbar">
+  <div :class="['vfcarousel__nav border-2 border-red', navbarClasses]" v-show="showNavbar">
 
       <flex-button action="go-prev-slide"/><!-- v-if="!hideArrows" -->
 
-      <div class="vue-flex-carousel__dot-nav"> <!-- v-if="!hideDots" -->
+      <div class="vfcarousel__dotnav"> <!-- v-if="!hideDots" -->
         <flex-button action="go-to-slide" v-for="(dot, index) in pagesCount" :key="index" :index="index"/>
       </div>
 
@@ -24,7 +24,7 @@ export default {
   props: {
     location: {
       type: String,
-      default: '' // top/bottom
+      default: '' // top/bottom/sides/left/right
     },
     position: {
       type: String,
@@ -36,12 +36,12 @@ export default {
 
   computed: {
     pagesCount() {
-      this.store.getters('pagesCount')
+      return this.store.getters('pagesCount')
     },
     navLocations() {
       return this.carousel.navLocations
     },
-    containerClasses() {
+    navbarClasses() {
       let classes = `nav__${this.location}-${this.position}`
 
       // CICS NOTE: can't use .some() here, will need to itterate the contexts to make sure we have an exact top or bottom match b/c user could configure top and bottom options
@@ -58,43 +58,70 @@ export default {
       return classes
     },
     showNavbar() {
-      // return (nav) => {
-      //   // CICS TODO: noodle on it.  Is there a way to optimize/simplify this logic?
-      //   return (
-      //     // top-outside
-      //     (nav == 'top-outside'
-      //       && (this.navs == 'top'
-      //         || (this.navs.includes('top') && !this.navs.includes('top(inside)'))
-      //         || (this.navs.includes('top(outside)') && this.navs.includes('top(inside)'))
-      //       )
-      //     ) ||
-      //
-      //     // top-inside
-      //     (nav == 'top-inside' && this.navs.includes('top(inside)')) ||
-      //
-      //     // bottom-inside
-      //     (nav == 'bottom-inside' && this.navs.includes('bottom(inside)')) ||
-      //
-      //     // bottom-outside
-      //     (nav == 'bottom-outside'
-      //       && (this.navs == 'bottom'
-      //         || (this.navs.includes('bottom') && !this.navs.includes('bottom(inside)'))
-      //         || (this.navs.includes('bottom(outside)') && this.navs.includes('bottom(inside)'))
-      //       )
-      //     ) ||
-      //
-      //     // sides-outside
-      //     (nav == 'sides-outside'
-      //       && (this.navs == 'sides'
-      //         || (this.navs.includes('sides') && !this.navs.includes('sides(inside)'))
-      //         || (this.navs.includes('sides(outside)') && this.navs.includes('sides(inside)')))
-      //     ) ||
-      //
-      //     // sides-inside
-      //     (nav == 'sides-inside' && this.navs.includes('sides(inside)'))
+
+      // NOTE: this logic is a bit abstract and may be hard to follow, so here are some notes!
+
+      // navbars positioned "inside" are targeted with the most specificity (i.e. 'top(inside)' or 'bottom(inside)' or 'sides(inside)')
+      // and this means that the "outside" navbars are displayed more frequently
+      // through less-specific string options in the navLocations prop (i.e. 'top' or 'bottom' or 'sides' will display the "outside" positions)
+
+      return (
+        // if a simple string like 'top' or 'bottom' or 'sides'
+        // and this navbars' postion is 'outside' (b/c outside is the default)
+        (this.navLocations == this.location) && (this.position == 'outside')
+        ||
+        // if this navbar's position is 'inside', the string must have (inside)
+        (this.position == 'inside' && this.navLocations.includes(`${this.location}(inside)`))
+
+        // // if exact match
+        // (this.navLocations == `${this.location}(${this.position})`)
+        // ||
+        // // if mathcing location and not specificalyl inside - then go ahead and display the outside
+        // (this.navLocations.includes(this.position) && !this.navLocations.includes(`${this.location}(inside)`))
+        // ||
+        // // if both inside and outside are displayed
+        // (this.navLocations.includes(`${this.location}(outside)`) && this.navLocations.includes(`${this.location}(inside)`))
+
+      )
+
+      // let rules = {
+      //   directMatch: this.navLocations.includes(`${this.location}(${this.position})`),
+      //   looseMatch: (
+      //     this.navLocations == this.location
+      //       || (this.navLocations.includes(this.position) && !this.navLocations.includes(`${this.location}(inside)`))
+      //       || (this.navLocations.includes(`${this.location}(outside)`) && this.navLocations.includes(`${this.location}(inside)`))
       //   )
       // }
-      return false
+
+      // if any of the rules return true, we are good to go!
+      // check each key to see of the values return as true :)
+      // return Object.keys(rules).some((key) => rules[key])
+
+      // return (
+
+
+        // so let's get the easy ones out of the way :) i.e. direct matches
+
+        //   // top-outside
+        //   (this.navLocations == 'top'
+        //       || (this.navLocations.includes('top') && !this.navLocations.includes('top(inside)'))
+        //       || (this.navLocations.includes('top(outside)') && this.navLocations.includes('top(inside)'))
+        //     )
+        //   ) ||
+        //
+        //   // bottom-outside
+        //   ((this.navLocations == 'bottom'
+        //       || (this.navLocations.includes('bottom') && !this.navLocations.includes('bottom(inside)'))
+        //       || (this.navLocations.includes('bottom(outside)') && this.navLocations.includes('bottom(inside)'))
+        //     )
+        //   ) ||
+        //
+        //   // sides-outside
+        //   ((this.navLocations == 'sides'
+        //       || (this.navLocations.includes('sides') && !this.navLocations.includes('sides(inside)'))
+        //       || (this.navLocations.includes('sides(outside)') && this.navLocations.includes('sides(inside)')))
+        //   ) ||
+
     },
     hideArrows() { // faster to check when to hide b/c arrows shown by default with less-specific settings like 'top', 'bottom'
       return (this.contexts.dots.some(context => this.navLocations.includes(context))
@@ -137,8 +164,15 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.vfcarousel__nav {
+<style lang="scss" scoped>
+.vfcarousel {
 
+  &__nav {
+
+  }
+
+  &__dotnav {
+
+  }
 }
 </style>

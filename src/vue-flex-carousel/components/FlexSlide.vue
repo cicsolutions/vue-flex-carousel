@@ -1,6 +1,6 @@
 <template>
   <div
-    class="vue-flex-carousel__slide"
+    class="vfcarousel__slide"
     :style="slideStyles"
     >
     <!-- @click="onClick" -->
@@ -69,7 +69,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .vfcarousel {
 
   &__slide {

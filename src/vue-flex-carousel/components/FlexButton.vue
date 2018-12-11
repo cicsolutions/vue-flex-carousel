@@ -2,10 +2,13 @@
   <button
     role="button"
     ref="button"
-    :class="['vue-flex-carousel__btn', {
-      'is-hidden': isHidden,
-      'is-active': isActive
-    }]"
+    :class="[
+      'vfcarousel__btn',
+      buttonClasses,
+      {
+        'is-hidden': isHidden,
+        'is-active': isActive
+      }]"
     @click="onClick"
     >
     <!-- @mouseover="onMouseover"
@@ -58,6 +61,11 @@ export default {
       //     break;
       // }
       return label
+    },
+    buttonClasses() {
+      let classes = []
+
+      return classes
     },
     buttonStyles() {
       // CICS NOTE: setting button styles via a string rather than this.button.style b/c computed props dont' have access to $refs.  Could also use method and nextTick, but ...
@@ -155,8 +163,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.vfcarousel__btn {
+<style lang="scss" scoped>
+.vfcarousel {
+  &__btn {
 
+  }
 }
 </style>
