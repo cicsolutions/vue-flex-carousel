@@ -1,61 +1,46 @@
 <template>
   <div>
 
-    <section :id="`vue-flex-carousel-${_uid}`" :class="['vue-flex-carousel', carouselClasses]">
+    <section :id="`vue-flex-carousel-${_uid}`" :class="['vue-flex-carousel', carouselClasses]" v-show="carousel.carouselReady">
 
       <!-- Top Nav - Outside -->
-      <!-- <flex-navbar v-if="navs && showNavigation('top-outside')" location="top" position="outside"/> -->
+      <flex-navbar location="top" position="outside"/>
 
       <div class="vue-flex-carousel__inner-wrap">
 
         <!-- Left Side Nav - Outside -->
-        <!-- <button v-if="navs && showNavigation('sides-outside')"
-          action="go-prev-slide"
-          @click="goToPrevious"
-          class="vue-flex-carousel__btn-previous">
-        </button> -->
+        <flex-navbar location="left" position="inside"/>
 
         <div class="vue-flex-carousel__inner bg-grey-light border border-grey rounded p-4 relative">
 
           <!-- Left Side Nav - Inside -->
-          <!-- <button v-if="navs && showNavigation('sides-inside')"
-            action="go-prev-slide"
-            @click="goToPrevious"
-            class="vue-flex-carousel__btn-previous absolute pin-l pin-t pin-b z-10">
-          </button> -->
-          <div class="vue-flex-carousel_stage-wrap relative p-1 bg-grey border border-grey-dark"> <!-- CICS NOTE: place inner shadow here? -->
+          <flex-navbar location="left" position="inside"/>
+
+          <div class="vue-flex-carousel_stage-wrap relative p-1 bg-grey border border-grey-dark">
 
             <!-- Top Inside Nav -->
-            <!-- <flex-navbar v-if="navs && showNavigation('top-inside')" location="top" position="inside" class="z-10"></flex-navbar> -->
+            <flex-navbar location="top" position="inside" class="z-10"/>
 
             <!-- STAGE -->
             <flex-stage/>
 
             <!-- Bottom Nav - Inside -->
-            <!-- <flex-navbar v-if="navs && showNavigation('bottom-inside')" location="bottom" position="inside" class="z-10"></flex-navbar> -->
+            <flex-navbar location="bottom" position="inside" class="z-10"/>
 
           </div>
 
           <!-- Right Side Nav - Inside -->
-          <!-- <button v-if="navs && showNavigation('sides-inside')"
-            type="next"
-            @click="goToNext"
-            class="vue-flex-carousel__btn-next absolute pin-r pin-t pin-b z-10">
-          </button> -->
+          <flex-navbar location="right" position="inside"/>
 
         </div>
 
         <!-- Right Side Nav - Outside -->
-        <!-- <button v-if="navs && showNavigation('sides-outside')"
-          type="next"
-          @click="goToNext"
-          class="vue-flex-carousel__btn-next">
-        </button> -->
+        <flex-navbar location="right" position="outside"/>
 
       </div>
 
       <!-- Bottom Nav - Outside -->
-      <!-- <flex-navbar v-if="navs && showNavigation('bottom-outside')" location="bottom" position="outside"/> -->
+      <flex-navbar location="bottom" position="outside"/>
 
       <!-- NOTE: Container to allow slotted slides to render so we can extract the slide data we need. -->
       <!-- This container should NEVER be displayed. Slides are processed on init and rendered manually above. -->
@@ -72,7 +57,9 @@
 </template>
 
 <script>
-import store from '../store'
+import flexCarousel from '../mixins/flexCarousel'
+import carouselProps from '../mixins/carouselProps'
+
 import { bus, events } from '../event-bus'
 
 import FlexStage from './FlexStage'
@@ -80,55 +67,16 @@ import FlexNavbar from './FlexNavbar'
 import FlexButton from './FlexButton'
 import CarouselSandbox from './sandbox/SandboxContainer'
 
-import flexCarousel from '../mixins/flexCarousel'
-
 export default {
   name: 'flex-carousel',
-  mixins: [flexCarousel],
+
+  mixins: [flexCarousel, carouselProps],
 
   components: { FlexStage, FlexNavbar, FlexButton, CarouselSandbox },
 
   computed: {
     navs() {
       return this.carousel.navLocations
-    },
-    showNavigation() {
-      return nav => {
-        // CICS TODO: noodle on it.  Is there a way to optimize/simplify this logic?
-        return (
-          // top-outside
-          (nav == 'top-outside'
-            && (this.navs == 'top'
-              || (this.navs.includes('top') && !this.navs.includes('top(inside)'))
-              || (this.navs.includes('top(outside)') && this.navs.includes('top(inside)'))
-            )
-          ) ||
-
-          // top-inside
-          (nav == 'top-inside' && this.navs.includes('top(inside)')) ||
-
-          // bottom-inside
-          (nav == 'bottom-inside' && this.navs.includes('bottom(inside)')) ||
-
-          // bottom-outside
-          (nav == 'bottom-outside'
-            && (this.navs == 'bottom'
-              || (this.navs.includes('bottom') && !this.navs.includes('bottom(inside)'))
-              || (this.navs.includes('bottom(outside)') && this.navs.includes('bottom(inside)'))
-            )
-          ) ||
-
-          // sides-outside
-          (nav == 'sides-outside'
-            && (this.navs == 'sides'
-              || (this.navs.includes('sides') && !this.navs.includes('sides(inside)'))
-              || (this.navs.includes('sides(outside)') && this.navs.includes('sides(inside)')))
-          ) ||
-
-          // sides-inside
-          (nav == 'sides-inside' && this.navs.includes('sides(inside)'))
-        )
-      }
     },
     activeSlide() {
       return this.store.getters('activeSlide')
@@ -178,8 +126,8 @@ export default {
     //
     // console.log(time)
 
-    let carouselShadows = this.userConfig('carousel', 'shadow')
-    console.log(carouselShadows)
+    // let carouselShadows = this.userConfig('carousel', 'shadow')
+    // console.log(carouselShadows)
   },
 
   created() {

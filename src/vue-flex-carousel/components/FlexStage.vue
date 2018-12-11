@@ -26,11 +26,13 @@
 </template>
 
 <script>
-import store from '../store'
+import flexCarousel from '../mixins/flexCarousel'
 import FlexSlide from './FlexSlide'
 
 export default {
   name: 'flex-stage',
+
+  mixins: [flexCarousel],
 
   props: {
 
@@ -38,12 +40,7 @@ export default {
 
   components: { FlexSlide },
 
-  data: () => ({ store }),
-
   computed: {
-    carousel() {
-      return this.store.state
-    },
     getters() {
       return this.store.getters
     },

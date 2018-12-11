@@ -6,19 +6,22 @@
     <!-- @click="onClick" -->
     <!-- NOTE: TODO: not sure why the click event is getting added to the dom, but no console.log is happening when I click on the slide? -->
 
-    <!-- <img :src="slide.src" alt="" v-if="slide.src"> -->
-    <div class="p-16 m-16">
+    <img :src="slide.src" alt="" v-if="slide.src">
+    <!-- <div class="p-16 m-16">
       yeah buddy!
-    </div>
+    </div> -->
 
   </div>
 </template>
 
 <script>
+import flexCarousel from '../mixins/flexCarousel'
 import { bus, events } from '../event-bus'
 
 export default {
   name: 'flex-slide',
+
+  mixins: [flexCarousel],
 
   props: {
     index: {
@@ -28,15 +31,16 @@ export default {
     data: {
       type: Object,
       default: null
-    },
-    // src property will be used to render a single image per slide
-    src: {
-      type: String,
-      default: null,
     }
   },
 
   computed: {
+    slide() {
+      // NOTE: we capture all the important data in carousel's init() function,
+      // then we process it and save it to the store,
+      // now we pass it in as the data prop
+      return this.data
+    },
     slideStyles() {
       let styles = null
 

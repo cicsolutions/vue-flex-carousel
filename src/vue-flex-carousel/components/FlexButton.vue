@@ -18,10 +18,12 @@
 </template>
 
 <script>
-import store from '../store'
+import flexCarousel from '../mixins/flexCarousel'
 
 export default {
   name: 'flex-button',
+
+  mixins: [flexCarousel],
 
   props: {
     action: {
@@ -34,12 +36,7 @@ export default {
     }
   },
 
-  data: () => ({ store }),
-
   computed: {
-    carousel() {
-      return this.store.state
-    },
     buttonType() {
       return null
     },

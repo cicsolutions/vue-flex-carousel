@@ -1,5 +1,5 @@
 <template>
-  <div :class="['vue-flex-carousel__nav border border-teal', containerClasses]">
+  <div :class="['vue-flex-carousel__nav border border-teal', containerClasses]" v-if="showNavbar">
 
       <flex-button action="go-prev-slide"/><!-- v-if="!hideArrows" -->
 
@@ -13,11 +13,13 @@
 </template>
 
 <script>
-import store from '../store'
+import flexCarousel from '../mixins/flexCarousel'
 import FlexButton from './FlexButton'
 
 export default {
   name: 'flex-navbar',
+
+  mixins: [flexCarousel],
 
   props: {
     location: {
@@ -32,12 +34,7 @@ export default {
 
   components: { FlexButton },
 
-  data: () => ({ store }),
-
   computed: {
-    carousel() {
-      return this.store.state
-    },
     pagesCount() {
       this.store.getters('pagesCount')
     },
@@ -59,6 +56,45 @@ export default {
       }
 
       return classes
+    },
+    showNavbar() {
+      // return (nav) => {
+      //   // CICS TODO: noodle on it.  Is there a way to optimize/simplify this logic?
+      //   return (
+      //     // top-outside
+      //     (nav == 'top-outside'
+      //       && (this.navs == 'top'
+      //         || (this.navs.includes('top') && !this.navs.includes('top(inside)'))
+      //         || (this.navs.includes('top(outside)') && this.navs.includes('top(inside)'))
+      //       )
+      //     ) ||
+      //
+      //     // top-inside
+      //     (nav == 'top-inside' && this.navs.includes('top(inside)')) ||
+      //
+      //     // bottom-inside
+      //     (nav == 'bottom-inside' && this.navs.includes('bottom(inside)')) ||
+      //
+      //     // bottom-outside
+      //     (nav == 'bottom-outside'
+      //       && (this.navs == 'bottom'
+      //         || (this.navs.includes('bottom') && !this.navs.includes('bottom(inside)'))
+      //         || (this.navs.includes('bottom(outside)') && this.navs.includes('bottom(inside)'))
+      //       )
+      //     ) ||
+      //
+      //     // sides-outside
+      //     (nav == 'sides-outside'
+      //       && (this.navs == 'sides'
+      //         || (this.navs.includes('sides') && !this.navs.includes('sides(inside)'))
+      //         || (this.navs.includes('sides(outside)') && this.navs.includes('sides(inside)')))
+      //     ) ||
+      //
+      //     // sides-inside
+      //     (nav == 'sides-inside' && this.navs.includes('sides(inside)'))
+      //   )
+      // }
+      return false
     },
     hideArrows() { // faster to check when to hide b/c arrows shown by default with less-specific settings like 'top', 'bottom'
       return (this.contexts.dots.some(context => this.navLocations.includes(context))
