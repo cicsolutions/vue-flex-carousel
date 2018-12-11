@@ -1,9 +1,12 @@
 <template>
   <div class="vue-flex-carousel__sandbox">
 
-    <actions class="fixed pin-b pin-l m-2 max-w-xs"/>
+    <div class="fixed pin-b pin-l m-2 max-w-xs">
+      <actions/>
+    </div>
 
     <div class="fixed pin-r pin-b flex flex-col m-2 max-w-xs">
+      <presets class="mb-2"/>
       <modes class="mb-2"/>
       <layouts class="mb-2"/>
       <effects class="mb-2"/>
@@ -22,10 +25,11 @@ import Effects from './Effects'
 import Events from './Events'
 import Layouts from './Layouts'
 import Modes from './Modes'
+import Presets from './Presets'
 
 export default {
   name: 'sandbox-container',
-  components: { Actions, Effects, Events, Layouts, Modes }
+  components: { Actions, Effects, Events, Layouts, Modes, Presets }
 }
 </script>
 
