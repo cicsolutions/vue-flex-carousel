@@ -102,7 +102,7 @@ export default {
 </script>
 
 <style lang="scss">
-.vue-flex-carousel__nav {
+.vfcarousel__nav {
 
 }
 </style>

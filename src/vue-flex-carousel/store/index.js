@@ -1,6 +1,5 @@
-import Vue from "vue";
+import Vue from 'vue'
 import { bus, events } from '../event-bus'
-import { capitalize } from '../utils/capitalize'
 
 // state
 const state = {

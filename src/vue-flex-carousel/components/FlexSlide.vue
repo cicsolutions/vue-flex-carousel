@@ -37,9 +37,6 @@ export default {
   },
 
   computed: {
-    slide() {
-      return this.data
-    },
     slideStyles() {
       let styles = null
 
@@ -69,11 +66,14 @@ export default {
 </script>
 
 <style lang="scss">
-.vue-flex-carousel__slide {
-  // @apply ;
+.vfcarousel {
 
-  img {
-    @apply .block;
+  &__slide {
+    // @apply ;
+
+    img {
+      @apply .block;
+    }
   }
 }
 </style>

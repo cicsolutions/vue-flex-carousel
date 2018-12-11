@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <section :id="`vue-flex-carousel-${_uid}`" class="vue-flex-carousel shadow-lg">
+    <section :id="`vue-flex-carousel-${_uid}`" :class="['vue-flex-carousel', carouselClasses]">
 
       <!-- Top Nav - Outside -->
       <!-- <flex-navbar v-if="navs && showNavigation('top-outside')" location="top" position="outside"/> -->
@@ -66,7 +66,7 @@
     </section>
 
     <!-- SANDBOX CONTROLS -->
-    <sandbox/>
+    <carousel-sandbox/>
 
   </div>
 </template>
@@ -78,23 +78,17 @@ import { bus, events } from '../event-bus'
 import FlexStage from './FlexStage'
 import FlexNavbar from './FlexNavbar'
 import FlexButton from './FlexButton'
-import Sandbox from './sandbox/SandboxContainer'
+import CarouselSandbox from './sandbox/SandboxContainer'
 
-import carouselProps from '../mixins/carouselProps'
+import flexCarousel from '../mixins/flexCarousel'
 
 export default {
   name: 'flex-carousel',
+  mixins: [flexCarousel],
 
-  components: { FlexStage, FlexNavbar, FlexButton, Sandbox },
-
-  mixins: [carouselProps],
-
-  data: () => ({ store }),
+  components: { FlexStage, FlexNavbar, FlexButton, CarouselSandbox },
 
   computed: {
-    carousel() {
-      return this.store.state
-    },
     navs() {
       return this.carousel.navLocations
     },
@@ -138,6 +132,26 @@ export default {
     },
     activeSlide() {
       return this.store.getters('activeSlide')
+    },
+    carouselClasses() {
+      let classes = []
+
+        // props = this.carousel,
+        // carouselShadows = Object.keys(props).filter((key) => (
+        //   (key == 'carouselShadow' & props[key] != 'none')
+        //   || (key == 'carouselShadowInner' & props[key] != 'none')
+        // ))
+
+      // console.log(carouselShadows)
+
+      // if (carouselShadows) {
+      //   classes.push(`shadow-${carouselShadow}`)
+      // }
+      // if (carouselShadowInner != 'none') {
+      //   classes.push(`shadow-${carouselShadow}`)
+      // }
+
+      return classes
     }
   },
 
@@ -157,13 +171,15 @@ export default {
       this._attachEventListeners()
     }
 
-
     // var width = 100, // width of a progress bar in percentage
     //     perfData = window.performance.timing, // The PerformanceTiming interface
     //     EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart), // Calculated Estimated Time of Page Load which returns negative value.
     //     time = parseInt((EstimatedTime/1000)%60)*100; //Converting EstimatedTime from miliseconds to seconds.
     //
     // console.log(time)
+
+    let carouselShadows = this.userConfig('carousel', 'shadow')
+    console.log(carouselShadows)
   },
 
   created() {
@@ -187,9 +203,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.vue-flex-carousel {
+.vfcarousel {
 
 
+}
+
+// SHADOWS
+.shadow {
+  &-sm { @apply .shadow }
+  &-inner-sm { @apply .shadow-inner }
+  // NOTE: other shadow classess are being custom generated in tailwindcss.js - i.e. shadow-inner-md/lg
 }
 
 // TRANSITIONS

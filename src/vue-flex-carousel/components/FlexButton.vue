@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import store from "../store"
+import store from '../store'
 
 export default {
   name: 'flex-button',
@@ -159,7 +159,7 @@ export default {
 </script>
 
 <style lang="scss">
-.vue-flex-carousel__btn {
+.vfcarousel__btn {
 
 }
 </style>

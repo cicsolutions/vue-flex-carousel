@@ -1,9 +1,9 @@
 <template>
   <div class="vue-flex-carousel__sandbox">
 
-    <actions class="fixed pin-b pin-l m-2"/>
+    <actions class="fixed pin-b pin-l m-2 max-w-xs"/>
 
-    <div class="fixed pin-r pin-b flex flex-col m-2">
+    <div class="fixed pin-r pin-b flex flex-col m-2 max-w-xs">
       <modes class="mb-2"/>
       <layouts class="mb-2"/>
       <effects class="mb-2"/>
@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="scss">
-.vue-flex-carousel__sandbox {
+.vfcarousel__sandbox {
   @apply .absolute .pin-t .pin-r .pin-b .pin-l;
 
   h3 {
