@@ -32,7 +32,7 @@ export default {
         {
           title: 'Slide #',
           caption: 'My amazing slide caption.',
-          src: 'https://placeimg.com/640/480/nature',
+          src: 'https://placeimg.com/640/480/nature', // CICS TODO: need a check to be sure slide data is accurate and available
           bgColor: '',
           bgImageUrl: '',
           innerHtml: '',
