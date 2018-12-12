@@ -1,0 +1,70 @@
+.btn {
+    @apply .border .rounded .px-3 .py-3 .font-semibold .cursor-pointer .shadow-inner .flex .items-center .justify-center .text-sm;
+
+    // font-family: 'Raleway';
+
+    &:hover, &.is-active {
+        @apply .bg-grey-lighter .border-grey .text-grey-darker;
+    }
+
+    &.is-active {
+        @apply .bg-grey-light .shadow;
+    }
+
+    &:disabled {
+        @apply .cursor-default .bg-grey-lightest .text-grey .border-grey-light;
+    }
+}
+
+.btn-primary {
+    @apply .bg-blue .text-white .border-blue-dark;
+
+    &:hover, &.is-active {
+        @apply .bg-blue-darker .text-blue-lighter .border-blue-dark;
+    }
+
+    &.is-active {
+        @apply .bg-blue;
+    }
+
+    &:disabled {
+        @apply .bg-blue-lighter .border-white .text-white;
+    }
+}
+
+.btn-sm {
+    @apply .px-3 .py-2 .text-sm .normal-case;
+}
+
+// @screen md {
+//     .btn {
+//         @apply .text-base;
+//     }
+// }
+
+// TODO: find a good way to delay some ajax and see if this animation is still working ... doesn't seem to be, maybe b/c changing flex and div structure, but we liked it!
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent !important;
+
+  &:after {
+    animation: spinAround 500ms infinite linear;
+    border: 2px solid #dbdbdb;
+    border-radius: 50%;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    content: "";
+    display: block;
+    height: 1em;
+    width: 1em;
+    position: absolute;
+    left: calc(50% - (1em / 2));
+    top: calc(50% - (1em / 2));
+  }
+}
+
+@keyframes spinAround {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(359deg); }
+}

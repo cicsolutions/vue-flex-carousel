@@ -19,5 +19,14 @@ yarn-error.log*
 *.sln
 *.sw*
 
+dist/*
+!dist/vue-flex-carousel*
+
 public/
+
+src/*
+!src/vue-flex-carousel/
+
+tailwind.js
+
 package-lock.json
