@@ -6,7 +6,7 @@
   "module": "dist/vue-flex-carousel.esm.js",
   "unpkg": "dist/vue-flex-carousel.umd.min.js",
   "browser": {
-    "./sfc": "src/vue-flex-carousel/FlexCarousel.vue"
+    "./sfc": "src/index.js"
   },
   "repository": {
     "type": "git",
