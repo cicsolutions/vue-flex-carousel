@@ -1,22 +1,20 @@
 <template>
   <button
     role="button"
-    ref="button"
-    :class="[
-      'vfcarousel__btn',
-      buttonClasses,
+    :class="[htmlBlock, cssModifiers,
       {
-        'is-hidden': isHidden,
-        'is-active': isActive
+        /* 'is-hidden': isHidden, */
+        /* 'is-active': isActive */
       }]"
     @click="onClick"
+    :title="title"
+    :aria-label="title"
     >
     <!-- @mouseover="onMouseover"
     @mouseout="onMouseout"
-    :style="buttonStyles"
-    :title="buttonTitle"
-    :aria-label="buttonTitle" -->
-    <slot><span v-html="buttonLabel"></span></slot>
+    :style="buttonStyles" -->
+
+    <slot><span v-html="label"/></slot>
   </button>
 </template>
 
@@ -31,7 +29,7 @@ export default {
   props: {
     action: {
       type: String,
-      default: 'go-to-slide'
+      default: 'go-to-slide' // or go-prev-slide or go-next-slide
     },
     index: {
       type: Number,
@@ -40,30 +38,47 @@ export default {
   },
 
   computed: {
-    buttonType() {
-      return null
+    goAction() {
+      let actionArray = this.action.split('-'),
+        goAction = actionArray[1] // to/prev/next
+
+      return goAction
     },
-    buttonLabel() {
-      return null
+    type() {
+      return this.goAction == 'to' ? 'dot' : this.goAction
     },
-    buttonTitle() {
-      let label = ''
-        // scrollElement = this.carousel.scrollElement
-      // switch (this.type) {
-      //   case 'prev':
-      //     label = `Previous ${scrollElement}`
-      //     break;
-      //   case 'next':
-      //     label = `Next ${scrollElement}`
-      //     break;
-      //   case 'dot':
-      //     label = `${scrollElement} ${this.index + 1}`
-      //     break;
-      // }
-      return label
+    title() {
+      let title = ''
+
+      // CICS NOTE: if we were using previous for our prop names instead of prev, we could avoid this type of switch statement
+      // CICS TODO: is there a createive way to change it under the hood so we get the best for the user and the app logic?
+      switch(this.type) {
+        case 'prev':
+          title = `Previous Slide`
+          break;
+        case 'next':
+          title = `Next Slide`
+          break;
+        case 'dot':
+          title = `Go To Slide ${this.index + 1}`
+          break;
+      }
+
+      return title
     },
-    buttonClasses() {
-      let classes = []
+    label() {
+      // CICS TODO FEATURE: set this up to accept a custom string that will interpret data (i.e. "Go to ${element} #${index}")
+
+      // NOTE: this label = '' check directly targets user having set the prop to an empty string
+      // if no label, default to button title, otherwise return the label from the carousel props
+      return (
+        (this.carousel[`${this.type}Label`] == '') ?
+          this.title
+          :this.carousel[`${this.type}Label`]
+      )
+    },
+    cssModifiers() {
+      let classes = [`${this.htmlBlock}--${this.type}`]
 
       return classes
     },
@@ -114,15 +129,14 @@ export default {
   methods: {
     onClick() {
       if (this.action != 'shuffle') {
-        let actionArray = this.action.split('-'),
-          action = actionArray[1], // prev/next/to
-          element = actionArray[2], // slide/page
-          index = action == 'to' ? this.index : null // we need to pass the index if action is goTo()
 
-        this.store.dispatch('go', { action, element, index })
+        let element = 'slide', // CICS TODO: for now -- will be dynamic soon!
+          index = this.goAction == 'to' ? this.index : null // we need to pass the index if action is goTo()
+
+        this.store.dispatch('go', { action: this.goAction, element, index })
       }
-      return null // just until we get the shuffle plugged in
-    }
+      return null // CICS NOTE: just until we get the shuffle plugged in
+    },
     // onMouseover() {
     //   if (['prev', 'next'].includes(this.type)) {
     //     let colors = this.carousel.navArrowColors
@@ -158,15 +172,50 @@ export default {
   },
 
   mounted() {
-    // this.button = this.$refs.button
+
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.vfcarousel {
-  &__btn {
+.flex-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  &--prev, &--next {
+    padding: 0.5rem;
+  }
+  // &--next {
+  //
+  // }
+  &--dot {
+    padding: 0.5rem;
+  }
+
+  span {
+    display: inherit;
   }
 }
+
+// &--shadow-sm {
+//   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+// }
+// &--shadow-md {
+//   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08);
+// }
+// &--shadow-lg {
+//   box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08);
+// }
+//
+// &--shadow-inner-sm {
+//   box-shadow: inset 0 0 6px -2px rgba(0,0,0,0.5);
+// }
+// &--shadow-inner-md {
+//   box-shadow: inset 0 0 25px -6px rgba(0,0,0,0.5);
+// }
+// &--shadow-inner-lg {
+//   box-shadow: inset 0 0 50px -10px rgba(0,0,0,0.5);
+// }
+
 </style>

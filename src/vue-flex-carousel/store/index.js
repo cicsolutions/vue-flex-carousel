@@ -125,30 +125,35 @@ const actions = {
   },
 
   go: ({ state, getters, commit }, { action, element, index }) => {
-    let capAction = action.capitalize(),
-      capElement = element.capitalize(),
-      prevNext = getters(action, element), // NOTE: value will be false if not allowed to prev/next
+    let capAction = action.capitalize(), // To/Prev/Next/Shuffle
+      capElement = element.capitalize(), // Slide/Page
       activeIndex = state[`active${capElement}Index`]
 
-    if (index && index != activeIndex) { // NOTE: if true, we've been passed an index, thus goTo(element, index) is the callback to fire
-
-      // going to the slide/page index passed - // CICS TODO: need a check here b/c we could be accepting a value passed by user
+    if (index !== null) { // NOTE: if true, we've been passed an index, thus goTo(element, index) is the callback to fire
 
       let callbackName = `onGoTo${capElement}`,
         reportData = {
-          action: capAction,
+          action,
           element: capElement,
           index: index
         }
 
-      // fire goTo callback
+      // fire goTo callback - // NOTE: we are firing the callback even if we are not chaging the activeIndex in the state
       bus.$emit(events.callbacks[callbackName], reportData)
 
-      // update active index for the slide/page
-      commit('setActiveIndex', reportData)
+      if (index != activeIndex) {
+
+        // going to the slide/page index passed - // CICS TODO: need a check here b/c we could be accepting a value passed by user
+        // and we need to be sure it within the right range (i.e. between zero and slideCount or pageCount)
+
+        // update active index for the slide/page
+        commit('setActiveIndex', reportData)
+      }
 
     } else {
       // CICS NOTE: Otherwise, we are prev/nexting, so goToPev/Next(element) would be the callback to fire
+      // and we'll get the index from the store
+      let prevNext = getters(action, element) // NOTE: value will be false if not allowed to prev/next
 
       if (prevNext !== false) { // if allowed to prev/next
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="vfcarousel__sandbox">
+  <div class="carousel__sandbox">
 
     <div class="fixed pin-b pin-l m-2 max-w-xs">
       <actions/>
@@ -34,8 +34,13 @@ export default {
 </script>
 
 <style lang="scss">
-.vfcarousel__sandbox {
-  @apply .absolute .pin-t .pin-r .pin-b .pin-l;
+.carousel__sandbox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
 
   h3 {
     @apply .mt-1 .mb-3;

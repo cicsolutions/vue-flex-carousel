@@ -37,12 +37,12 @@ export default {
     },
 
     // navigation - dots and arrows
-    navLocations: {
+    navbars: {
       type: String,
-      default: null
+      default: ''
     },
     /*
-      navLocations example config strings:
+      navbars example config strings:
         sides(inside)_bottom-dots_top-dots or top-dots_bottom-dots_sides(inside) or bottom-dots_sides(inside)_top-dots --> all produce the same resulting layout
 
       top
@@ -67,40 +67,46 @@ export default {
 
     */
 
-    // CICS TODO: should probably remove the 'nav' prefix to make for cleaner prop setting for the user
-    navDotLabel: {
+    // Navbar Dots
+    dotLabel: { // CICS TODO FEATURE: set this up to accept a custom string that will interpret data (i.e. "Go to ${element} #${index}")
       type: String,
       default: `<svg width="10px" height="10px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"/></svg>`
     },
-    navDotTrigger: {
+    dotTrigger: {
       type: String,
       default: 'click' // (click/mouseover/none) - none, in case the user wants to display the dots purely for a visual effect?
     },
-    navDotMagnifyOnHover: {
+    dotMagnifyOnHover: {
       type: Boolean,
       default: true
     },
-    navDotColors: {
+    dotColors: {
       type: Array,
       default: () => ([]) // base/hover/active - leave unset to control colors via css overrides
     },
-    navPrevLabel: {
+
+    // Navbar Prev/Next
+    prevLabel: { // can be svg string, ascii string, imageUrl string
       type: String,
-      default: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 8 16"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"/></svg>' //'&#9664', '&laquo;'
+      default: '&#9664'
+      //'<svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 8 16"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"/></svg>'
+      //'&#9664', '&laquo;'
     },
-    navNextLabel: {
+    nextLabel: { // can be svg string, ascii string, imageUrl string
       type: String,
-      default: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 8 16"><path fill-rule="evenodd" d="M7.5 8l-5 5L1 11.5 4.75 8 1 4.5 2.5 3l5 5z"/></svg>' //'&#9654', '&raquo;'
+      default: '&#9654'
+      //'<svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 8 16"><path fill-rule="evenodd" d="M7.5 8l-5 5L1 11.5 4.75 8 1 4.5 2.5 3l5 5z"/></svg>'
+      //'&#9654', '&raquo;'
     },
-    navArrowTrigger: {
+    prevNextTrigger: {
       type: String,
       default: 'click' // (click/mouseover)
     },
-    navArrowColors: {
+    prevNextColors: {
       type: Array,
       default: () => ([]) // default/hover/disabled - leave unset to control colors via css overrides
     },
-    showPrevNextOnHover: { // CICS TODO: this will override any settings related to 'sides' in the navLocations setting, and force sides(inside)
+    revealPrevNextOnHover: { // CICS TODO: this will override any settings related to 'sides' in the navbars setting, and force sides(inside)
       type: Boolean,
       default: false
     },

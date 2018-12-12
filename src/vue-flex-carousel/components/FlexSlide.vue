@@ -1,12 +1,13 @@
 <template>
   <div
-    class="vfcarousel__slide"
+    class="slide"
     :style="slideStyles"
+    @click="onClick"
     >
     <!-- @click="onClick" -->
     <!-- NOTE: TODO: not sure why the click event is getting added to the dom, but no console.log is happening when I click on the slide? -->
 
-    <img :src="slide.src" alt="" v-if="slide.src">
+    <img class="slide__image" :src="slide.src" alt="" v-if="slide.src">
     <!-- <div class="p-16 m-16">
       yeah buddy!
     </div> -->
@@ -49,13 +50,13 @@ export default {
   },
 
   methods: {
-    onClick() {
-      // let reportData = {
-      //   event: e,
-      //   // index: this.index
-      // }
-      console.log('clicked!')
-      // bus.$emit(events.callbacks.onSlideClick, reportData)
+    onClick(e) {
+      let reportData = {
+        event: e,
+        index: this.index
+      }
+      // console.log('clicked!')
+      bus.$emit(events.callbacks.onSlideClick, reportData)
     }
   },
 
@@ -70,14 +71,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.vfcarousel {
+.slide {
 
-  &__slide {
-    // @apply ;
-
-    img {
-      @apply .block;
-    }
+  &__title {
+    display: block;
   }
+
+  &__caption {
+
+  }
+
+  &__teaser {
+
+  }
+
+  &__image {
+    display: block;
+  }
+
 }
 </style>

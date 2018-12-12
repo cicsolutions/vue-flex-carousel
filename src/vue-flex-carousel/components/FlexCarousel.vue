@@ -1,50 +1,50 @@
 <template>
   <div>
 
-    <section :id="`vue-flex-carousel-${_uid}`" :class="['carousel', carouselClasses]" v-show="carousel.carouselReady">
+    <section :id="`vue-flex-carousel-${_uid}`" :class="[htmlBlock, cssModifiers]" v-show="carousel.carouselReady">
 
       <!-- Top Nav - Outside -->
-      <flex-navbar location="top" position="outside"/>
+      <flex-navbar v-if="showNavbar('top-outside')" location="top" position="outside"/>
 
-      <div class="carousel__inner-wrap">
+      <div class="flex-carousel__inner-wrap">
 
         <!-- Left Side Nav - Outside -->
-        <flex-navbar location="left" position="inside"/>
+        <flex-navbar v-if="showNavbar('left-outside')" location="left" position="outside"/>
 
-        <div class="carousel__inner bg-grey-light border border-grey rounded p-4 relative">
+        <div class="flex-carousel__inner">
 
           <!-- Left Side Nav - Inside -->
-          <flex-navbar location="left" position="inside"/>
+          <flex-navbar v-if="showNavbar('left-inside')" location="left" position="inside"/>
 
-          <div class="carousel_stage-wrap relative p-1 bg-grey border border-grey-dark">
+          <div class="flex-carousel_stage-wrap">
 
             <!-- Top Inside Nav -->
-            <flex-navbar location="top" position="inside" class="z-10"/>
+            <flex-navbar v-if="showNavbar('top-inside')" location="top" position="inside"/>
 
             <!-- STAGE -->
             <flex-stage/>
 
             <!-- Bottom Nav - Inside -->
-            <flex-navbar location="bottom" position="inside" class="z-10"/>
+            <flex-navbar v-if="showNavbar('bottom-inside')" location="bottom" position="inside"/>
 
           </div>
 
           <!-- Right Side Nav - Inside -->
-          <flex-navbar location="right" position="inside"/>
+          <flex-navbar v-if="showNavbar('right-inside')" location="right" position="inside"/>
 
         </div>
 
         <!-- Right Side Nav - Outside -->
-        <flex-navbar location="right" position="outside"/>
+        <flex-navbar v-if="showNavbar('right-outside')" location="right" position="outside"/>
 
       </div>
 
       <!-- Bottom Nav - Outside -->
-      <flex-navbar location="bottom" position="outside"/>
+      <flex-navbar v-if="showNavbar('bottom-outside')" location="bottom" position="outside"/>
 
       <!-- NOTE: Container to allow slotted slides to render so we can extract the slide data we need. -->
       <!-- This container should NEVER be displayed. Slides are processed on init and rendered manually above. -->
-      <div v-show="false">
+      <div class="slides_preloader" v-show="false">
         <slot/>
       </div>
 
@@ -74,13 +74,13 @@ export default {
   components: { FlexStage, FlexNavbar, CarouselSandbox },
 
   computed: {
-    navs() {
-      return this.carousel.navLocations
-    },
+    // navs() {
+    //   return this.carousel.navbars
+    // },
     activeSlide() {
       return this.store.getters('activeSlide')
     },
-    carouselClasses() {
+    cssModifiers() {
       let classes = []
 
         // props = this.carousel,
@@ -99,6 +99,42 @@ export default {
       // }
 
       return classes
+    },
+    showNavbar() {
+      return (loc) => {
+
+        let navbar = loc.split('-'),
+          navbarLocation = navbar[0],
+          navbarPosition = navbar[1]
+
+        // NOTE: this logic is a bit abstract and may be hard to follow, so here are some notes!
+
+        return (
+          // target more-specific strings first - exact matches found for location(outside/inside)
+          (this.carousel.navbars.includes(`${navbarLocation}(${navbarPosition})`))
+          ||
+          // target top/bottom/left/right location(outside) settings - because position outside is the default
+          (this.carousel.navbars.includes(navbarLocation)
+            && navbarPosition == 'outside'
+            && !this.carousel.navbars.includes(`${navbarLocation}(inside)`)
+          )
+          ||
+          // target sides location, wich really applies to locations left and right combined
+          (this.carousel.navbars.includes('sides')
+            && ((navbarLocation == 'left') || (navbarLocation == 'right')) // locations left and right combined
+            && (
+              // inside
+              (navbarPosition == 'inside'
+                && this.carousel.navbars.includes('sides(inside)'))
+              ||
+              // outside
+              (navbarPosition == 'outside'
+                && !this.carousel.navbars.includes('sides(inside)'))
+            )
+          )
+        )
+
+      }
     }
   },
 
@@ -150,16 +186,77 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.carousel {
 
+.flex-carousel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  z-index: 1; // pulls carousel above the sandbox container
+
+  &--shadow-sm {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+  }
+  &--shadow-md {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08);
+  }
+  &--shadow-lg {
+    box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08);
+  }
+
+  &--shadow-inner-sm {
+    box-shadow: inset 0 0 6px -2px rgba(0,0,0,0.5);
+  }
+  &--shadow-inner-md {
+    box-shadow: inset 0 0 25px -6px rgba(0,0,0,0.5);
+  }
+  &--shadow-inner-lg {
+    box-shadow: inset 0 0 50px -10px rgba(0,0,0,0.5);
+  }
 
 }
 
-// SHADOWS
-.shadow {
-  &-sm { @apply .shadow }
-  &-inner-sm { @apply .shadow-inner }
-  // NOTE: other shadow classess are being custom generated in tailwindcss.js - i.e. shadow-inner-md/lg
+.flex-carousel__inner-wrap {
+  display: flex;
+}
+.flex-carousel__inner {
+  position: relative;
+
+  // @apply .bg-grey-light .border .border-grey .rounded .p-4; // framed theme
+}
+.flex-carousel__stage-wrap {
+  position: relative;
+  z-index: 0;
+
+  @applly .p-1 .bg-grey .border .border-grey-dark; // theme framed
+}
+.flex-carousel__stage {
+
+}
+// SHADOWS - // TODO: make this into a scss mixin/function?
+// &--shadow-sm {
+//   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+// }
+// &--shadow-md {
+//   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08);
+// }
+// &--shadow-lg {
+//   box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08);
+// }
+//
+// &--shadow-inner-sm {
+//   box-shadow: inset 0 0 6px -2px rgba(0,0,0,0.5);
+// }
+// &--shadow-inner-md {
+//   box-shadow: inset 0 0 25px -6px rgba(0,0,0,0.5);
+// }
+// &--shadow-inner-lg {
+//   box-shadow: inset 0 0 50px -10px rgba(0,0,0,0.5);
+// }
+
+.slides_preloader {
+  height: 0;
+  width: 0;
 }
 
 // TRANSITIONS

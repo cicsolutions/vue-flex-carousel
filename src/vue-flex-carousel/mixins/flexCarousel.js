@@ -5,6 +5,9 @@ import store from '../store'
 export default {
   data: () => ({ store }),
   computed: {
+    htmlBlock() {
+      return this.$options.name
+    },
     carousel() {
       return this.store.state
     },

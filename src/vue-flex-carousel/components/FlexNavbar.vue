@@ -1,14 +1,10 @@
 <template>
-  <div :class="['vfcarousel__nav border-2 border-red', navbarClasses]" v-show="showNavbar">
-
-      <flex-button action="go-prev-slide"/><!-- v-if="!hideArrows" -->
-
-      <div class="vfcarousel__dotnav"> <!-- v-if="!hideDots" -->
+  <div :class="[htmlBlock, cssModifiers]" :location="location" :position="position">
+      <flex-button class="navbar__prev" action="go-prev-slide"/>
+      <div class="navbar__dotnav">
         <flex-button action="go-to-slide" v-for="(dot, index) in pagesCount" :key="index" :index="index"/>
       </div>
-
-      <flex-button action="go-next-slide"/><!-- v-if="!hideArrows" -->
-
+      <flex-button class="navbar__next" action="go-next-slide"/>
   </div>
 </template>
 
@@ -38,98 +34,35 @@ export default {
     pagesCount() {
       return this.store.getters('pagesCount')
     },
-    navLocations() {
-      return this.carousel.navLocations
+    navbars() {
+      return this.carousel.navbars
     },
-    navbarClasses() {
-      let classes = `nav__${this.location}-${this.position}`
+    cssModifiers() {
+      let classes = `${this.htmlBlock}--${this.location}-${this.position}`
+
+
+
 
       // CICS NOTE: can't use .some() here, will need to itterate the contexts to make sure we have an exact top or bottom match b/c user could configure top and bottom options
-      if (this.contexts.locations.some(context => this.navLocations.includes(context))) {
-        if (this.navLocations.includes(`--left`)) {
-          classes += '--left'
-        }
-      } else if (this.contexts.locations.some(context => this.navLocations.includes(context))) {
-        if (this.navLocations.includes(`--right`)) {
-          classes += '--right'
-        }
-      }
+      // if (this.contexts.locations.some(context => this.navbars.includes(context))) {
+      //   if (this.navbars.includes(`--left`)) {
+      //     classes += '--left'
+      //   }
+      // } else if (this.contexts.locations.some(context => this.navbars.includes(context))) {
+      //   if (this.navbars.includes(`--right`)) {
+      //     classes += '--right'
+      //   }
+      // }
 
       return classes
     },
-    showNavbar() {
-
-      // NOTE: this logic is a bit abstract and may be hard to follow, so here are some notes!
-
-      // navbars positioned "inside" are targeted with the most specificity (i.e. 'top(inside)' or 'bottom(inside)' or 'sides(inside)')
-      // and this means that the "outside" navbars are displayed more frequently
-      // through less-specific string options in the navLocations prop (i.e. 'top' or 'bottom' or 'sides' will display the "outside" positions)
-
-      return (
-        // if a simple string like 'top' or 'bottom' or 'sides'
-        // and this navbars' postion is 'outside' (b/c outside is the default)
-        (this.navLocations == this.location) && (this.position == 'outside')
-        ||
-        // if this navbar's position is 'inside', the string must have (inside)
-        (this.position == 'inside' && this.navLocations.includes(`${this.location}(inside)`))
-
-        // // if exact match
-        // (this.navLocations == `${this.location}(${this.position})`)
-        // ||
-        // // if mathcing location and not specificalyl inside - then go ahead and display the outside
-        // (this.navLocations.includes(this.position) && !this.navLocations.includes(`${this.location}(inside)`))
-        // ||
-        // // if both inside and outside are displayed
-        // (this.navLocations.includes(`${this.location}(outside)`) && this.navLocations.includes(`${this.location}(inside)`))
-
-      )
-
-      // let rules = {
-      //   directMatch: this.navLocations.includes(`${this.location}(${this.position})`),
-      //   looseMatch: (
-      //     this.navLocations == this.location
-      //       || (this.navLocations.includes(this.position) && !this.navLocations.includes(`${this.location}(inside)`))
-      //       || (this.navLocations.includes(`${this.location}(outside)`) && this.navLocations.includes(`${this.location}(inside)`))
-      //   )
-      // }
-
-      // if any of the rules return true, we are good to go!
-      // check each key to see of the values return as true :)
-      // return Object.keys(rules).some((key) => rules[key])
-
-      // return (
-
-
-        // so let's get the easy ones out of the way :) i.e. direct matches
-
-        //   // top-outside
-        //   (this.navLocations == 'top'
-        //       || (this.navLocations.includes('top') && !this.navLocations.includes('top(inside)'))
-        //       || (this.navLocations.includes('top(outside)') && this.navLocations.includes('top(inside)'))
-        //     )
-        //   ) ||
-        //
-        //   // bottom-outside
-        //   ((this.navLocations == 'bottom'
-        //       || (this.navLocations.includes('bottom') && !this.navLocations.includes('bottom(inside)'))
-        //       || (this.navLocations.includes('bottom(outside)') && this.navLocations.includes('bottom(inside)'))
-        //     )
-        //   ) ||
-        //
-        //   // sides-outside
-        //   ((this.navLocations == 'sides'
-        //       || (this.navLocations.includes('sides') && !this.navLocations.includes('sides(inside)'))
-        //       || (this.navLocations.includes('sides(outside)') && this.navLocations.includes('sides(inside)')))
-        //   ) ||
-
-    },
     hideArrows() { // faster to check when to hide b/c arrows shown by default with less-specific settings like 'top', 'bottom'
-      return (this.contexts.dots.some(context => this.navLocations.includes(context))
-          && !this.contexts.arrows.some(context => this.navLocations.includes(context)))
+      return (this.contexts.dots.some(context => this.navbars.includes(context))
+          && !this.contexts.arrows.some(context => this.navbars.includes(context)))
     },
     hideDots() { // faster to check when to hide b/c dots shown by default with less-specific settings like 'top', 'bottom'
-      return (this.contexts.arrows.some(context => this.navLocations.includes(context))
-        && !this.contexts.dots.some(context => this.navLocations.includes(context)))
+      return (this.contexts.arrows.some(context => this.navbars.includes(context))
+        && !this.contexts.dots.some(context => this.navbars.includes(context)))
     },
     contexts() {
       // CICS TODO: explain this logic in a note!!
@@ -165,14 +98,189 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.vfcarousel {
-
-  &__nav {
-
-  }
-
-  &__dotnav {
-
-  }
+.flex-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
+.navbar__dotnav {
+  display: flex;
+}
+
+.flex-navbar {
+  // location top
+  &[location='top'], &[location='bottom'] {
+
+    .navbar__dotnav {
+
+    }
+  }
+
+  // position inside
+  &[position="inside"] {
+    position: absolute;
+    z-index: 10;
+
+    button {
+      color: #fff;
+    }
+    svg {
+      fill: currentColor;
+    }
+
+    &[location="top"] {
+      width: 100%;
+      top: 0;
+      right: 0;
+      left: 0;
+    }
+    &[location="right"] {
+      height: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
+    &[location="bottom"] {
+      width: 100%;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    &[location="left"] {
+      height: 100%;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    }
+  }
+
+  &[location="left"], &[location="right"] {
+    flex-direction: column;
+
+    .navbar__dotnav {
+      flex-direction: column;
+    }
+  }
+
+
+  // location bottom
+  // &[location='bottom'] {
+  //
+  // }
+  //
+  // // location left
+  // &[location='left'] {
+  //
+  // }
+  //
+  // // location right
+  // &[location='right'] {
+  //
+  // }
+
+}
+// .flex-navbar--top {
+//
+//   &-outside {
+//
+//     @apply .border .border-red;
+//
+//   }
+//
+//   &-inside {
+//     width: 100%;
+//     top: 0;
+//     right: 0;
+//     left: 0;
+//     z-index: 10;
+//
+//     @apply .border .border-white .text-white;
+//   }
+// }
+// .flex-navbar--bottom {
+//   @apply .border .border-orange;
+//
+//   &-outside {
+//
+//     @apply .border .border-red;
+//   }
+//
+//   &-inside {
+//     width: 100%;
+//     right: 0;
+//     bottom: 0;
+//     left: 0;
+//     z-index: 10;
+//
+//
+//     @apply .border .border-white .text-white;
+//   }
+// }
+// .flex-navbar--left {
+//   @apply .border .border-green;
+//
+//   &-outside {
+//     flex-direction: column;
+//
+//     @apply .border .border-red;
+//   }
+//
+//   &-inside {
+//     height: 100%;
+//     top: 0;
+//     bottom: 0;
+//     left: 0;
+//     z-index: 10;
+//
+//     flex-direction: column;
+//
+//     @apply .border .border-white .text-white;
+//   }
+// }
+// .flex-navbar--right {
+//   @apply .border .border-blue;
+//
+//   &-outside {
+//     flex-direction: column;
+//
+//     @apply .border .border-red;
+//   }
+//
+//   &-inside {
+//     height: 100%;
+//     top: 0;
+//     right: 0;
+//     bottom: 0;
+//     z-index: 10;
+//
+//     flex-direction: column;
+//
+//     @apply .border .border-white .text-white;
+//   }
+// }
+
+
+
+
+
+// &--shadow-sm {
+//   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+// }
+// &--shadow-md {
+//   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08);
+// }
+// &--shadow-lg {
+//   box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08);
+// }
+//
+// &--shadow-inner-sm {
+//   box-shadow: inset 0 0 6px -2px rgba(0,0,0,0.5);
+// }
+// &--shadow-inner-md {
+//   box-shadow: inset 0 0 25px -6px rgba(0,0,0,0.5);
+// }
+// &--shadow-inner-lg {
+//   box-shadow: inset 0 0 50px -10px rgba(0,0,0,0.5);
+// }
 </style>
