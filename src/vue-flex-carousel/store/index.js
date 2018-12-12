@@ -69,7 +69,7 @@ const actions = {
 
       // throw error if there were no slides in the props either
       if (!getters('slidesCount')) {
-        throw new SyntaxError('Vue-Flex-Carousel Error: No slide data found in slides property or <slide> elements inside <flex-carousel>.')
+        throw new SyntaxError('Vue-Flex-Carousel Error: No carousel slide data found. Be sure you add some slides!')
       }
 
     } else {
