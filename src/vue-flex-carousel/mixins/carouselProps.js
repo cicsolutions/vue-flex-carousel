@@ -148,7 +148,7 @@ export default {
     },
     stageBgColor: {
       type: String,
-      default: null
+      default: ''
     },
 
     // external navigation params
@@ -164,7 +164,7 @@ export default {
     // slide content
     slides: {
       type: Array,
-      default: null
+      default: () => ([])
     },
 
     // transitions
