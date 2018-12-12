@@ -24,8 +24,9 @@ dist/*
 
 public/
 
-src/*
-!src/vue-flex-carousel/
+src/assets/
+src/App.vue
+src/main.js
 
 tailwind.js
 
