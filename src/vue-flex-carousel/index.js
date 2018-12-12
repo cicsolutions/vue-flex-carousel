@@ -1,16 +1,16 @@
-import FlexCarousel from './FlexCarousel.vue'
-import Slide from './FlexSlide.vue'
+import FlexCarousel from './components/FlexCarousel'
+import Slide from './components/SlideInput'
 
 const install = (Vue) => {
-    Vue.component('flex-carousel', FlexCarousel)
-    Vue.component('slide', Slide)
+  Vue.component('flex-carousel', FlexCarousel)
+  Vue.component('slide', Slide)
 }
 
 export default {
-    install
+  install
 }
 
 export {
-    FlexCarousel,
-    Slide
+  FlexCarousel,
+  Slide
 }
